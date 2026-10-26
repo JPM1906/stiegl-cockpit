@@ -1,0 +1,1082 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frühwarn-Cockpit Stiegl</title>
+<meta name="description" content="Frühwarnsystem für eine strategische Krise – Studienprojekt zur Stieglbrauerei zu Salzburg">
+<meta name="theme-color" content="#141414">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23141414'/%3E%3Crect x='5' y='20' width='6' height='7' fill='%23666'/%3E%3Crect x='13' y='14' width='6' height='13' fill='%23999'/%3E%3Crect x='21' y='6' width='6' height='21' fill='%23E3001B'/%3E%3C/svg%3E">
+<style>
+:root{--red:#E3001B;--red-d:#B80016;--red-l:#FDE8EA;--black:#141414;--g1:#F3F3F3;--g2:#DCDCDC;--g3:#4D4D4D;--white:#FFFFFF;--yellow:#F2B700;--green:#1E6B3F;--pink:#FF8A95;--mint:#9FD3B4}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--g1);color:var(--black);font-family:Tahoma,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;line-height:1.45}
+button,input,select,textarea{font-family:inherit;color:inherit;font-size:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+a{color:var(--red-d)}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1280px;margin:0 auto;padding-left:16px;padding-right:16px}
+@media(min-width:720px){.wrap{padding-left:24px;padding-right:24px}}
+
+/* header */
+header{background:var(--black);color:var(--white);position:relative;overflow:hidden}
+.stairs{position:absolute;right:-6px;bottom:0;display:flex;align-items:flex-end;opacity:.9;pointer-events:none}
+.stairs i{display:block;width:34px}
+@media(min-width:720px){.stairs i{width:46px}}
+.hd{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:flex-end;padding-top:28px;padding-bottom:30px;position:relative}
+@media(min-width:720px){.hd{padding-top:40px;padding-bottom:36px}}
+.kicker{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--pink);font-weight:700}
+h1{margin:6px 0 8px;font-size:34px;line-height:1.05}
+@media(min-width:720px){h1{font-size:46px}}
+.lead{margin:0;max-width:680px;font-size:15px;color:#D6D6D6}
+.hd-left{flex:999 1 520px;min-width:0}
+.fchips{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.fchip{display:flex;flex-direction:column;gap:2px;padding:10px 14px;border-radius:10px;background:#222;border:1px solid #3A3A3A;min-width:140px;flex:1 1 140px;max-width:220px}
+.fchip .l{font-size:12px;color:#BDBDBD}
+.fchip .v{font-size:22px;font-weight:700}
+.fchip .n{font-size:12px;font-weight:700}
+.t-gut{color:var(--mint)}.t-mittel{color:var(--yellow)}.t-schlecht{color:var(--pink)}
+.hd-card{flex:1 1 280px;max-width:400px;background:var(--red);border-radius:14px;padding:20px;box-shadow:0 14px 36px rgba(0,0,0,.35)}
+.hd-card .big{font-size:56px;font-weight:700;line-height:1}
+.hd-card small{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.hd-card p{margin:8px 0 0;font-size:14px}
+
+/* banner */
+.banner{background:#FFF4CC;border-bottom:1px solid #E8D58A;font-size:14px}
+.banner .wrap{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding-top:8px;padding-bottom:8px}
+.linkbtn{background:none;border:none;padding:6px 0;min-height:36px;font-weight:700;text-decoration:underline;cursor:pointer;color:var(--black)}
+
+/* nav */
+nav{background:var(--white);border-bottom:1px solid var(--g2);position:sticky;top:0;z-index:10}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:44px;padding:8px 16px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;border:2px solid #CFCFCF;background:var(--white);color:var(--black);white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--black);border-color:var(--black);color:var(--white)}
+.chip.sm{min-height:40px;padding:6px 14px;font-size:13px}
+.chip.edit{border-style:dashed;border-color:var(--red);color:var(--red-d)}
+.chip.edit[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+
+main{padding-top:24px;padding-bottom:48px}
+section{display:none}
+section.on{display:block;animation:fade .3s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){section.on{animation:none}}
+h2{margin:0;font-size:24px;line-height:1.2}
+@media(min-width:720px){h2{font-size:28px}}
+h3{margin:0;font-size:19px;line-height:1.25}
+.sub{margin:6px 0 0;font-size:14px;color:var(--g3);max-width:820px}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:16px}
+.card{background:var(--white);border-radius:16px;padding:18px}
+@media(min-width:720px){.card{padding:22px}}
+.dark{background:var(--black);color:var(--white)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr))}
+.label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--g3)}
+.dark .label{color:#BDBDBD}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.row>.main{flex:999 1 560px;min-width:0}
+.row>.side{flex:1 1 300px;min-width:0}
+
+/* pills */
+.pill{display:inline-block;vertical-align:middle;white-space:nowrap;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;border:1.5px solid}
+.p-rot{background:var(--red);border-color:var(--red);color:#fff}
+.p-gelb{background:var(--yellow);border-color:var(--yellow);color:var(--black)}
+.p-gruen{background:var(--green);border-color:var(--green);color:#fff}
+.p-offen{background:#fff;border:1.5px dashed #8A8A8A;color:var(--g3)}
+.p-neutral{background:#fff;border-color:#CFCFCF;color:var(--black)}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:1.5px solid}
+.d-rot{background:var(--red);border-color:var(--red)}.d-gelb{background:var(--yellow);border-color:var(--yellow)}.d-gruen{background:var(--green);border-color:var(--green)}.d-offen{background:#fff;border-style:dashed;border-color:#8A8A8A}
+
+/* tiles */
+.tile{text-align:left;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:14px;background:var(--white);border:2px solid var(--white);box-shadow:0 1px 0 var(--g2);transition:transform .15s,box-shadow .15s;width:100%}
+.tile:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(20,20,20,.10)}
+.tile[aria-pressed="true"]{border-color:var(--red);box-shadow:0 10px 26px rgba(227,0,27,.18)}
+.tile .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;width:100%}
+.tile .nm{font-size:17px;font-weight:700}
+.tile .nm b{color:var(--red)}
+.tile .q{font-size:13px;color:var(--g3)}
+.tile .key{font-size:32px;font-weight:700;line-height:1.1}
+.tile .kl{font-size:13px;color:var(--g3)}
+.tile .dots{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:4px;font-size:12px;color:var(--g3)}
+
+/* detail */
+.chain{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}
+.chain div{display:flex;gap:10px;align-items:flex-start;background:var(--g1);border-radius:10px;padding:12px 14px;font-size:14px}
+.chain span{flex:none;width:26px;height:26px;border-radius:50%;background:var(--black);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.subs{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))}
+.subc{border:1px solid #E2E2E2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.subc .t{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;font-weight:700;font-size:15px}
+.subc .v{font-size:18px;font-weight:700}
+.subc dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:13px;color:var(--g3)}
+.subc dt{font-weight:700}
+.subc dd{margin:0}
+.redbox{background:var(--black);color:#fff;border-radius:12px;padding:16px 18px;font-size:15px}
+.redbox strong{color:var(--pink)}
+
+/* simulator */
+.ctrl{background:var(--white);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.ctrl .h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.ctrl label,.ctrl .lb{font-size:15px;font-weight:700}
+.ctrl .hint{font-size:13px;color:var(--g3)}
+.ctrl .val{font-size:28px;font-weight:700;line-height:1.1}
+.ctrl .ist{font-size:12px;color:var(--g3)}
+input[type=range]{width:100%;height:32px;accent-color:var(--red);margin:0}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.kpis{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.kpi{background:#222;border:1px solid #3A3A3A;border-radius:12px;padding:12px}
+.kpi .k{font-size:12px;color:#BDBDBD}
+.kpi .v{font-size:22px;font-weight:700;line-height:1.15;white-space:nowrap}
+.kpi .v small{font-size:13px;font-weight:700;margin-left:3px}
+.kpi .d{font-size:12px;font-weight:700}
+.up{color:var(--mint)}.down{color:var(--pink)}.flat{color:#BDBDBD}
+.res{border-radius:12px;padding:14px 16px;font-size:14px}
+.outlook div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #333;font-size:14px}
+.outlook small{display:block;color:#BDBDBD;font-size:12px}
+.meter{height:10px;border-radius:99px;background:#333;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--red);border-radius:99px;transition:width .2s}
+details{background:var(--white);border-radius:14px;padding:14px 18px}
+summary{cursor:pointer;font-weight:700;font-size:15px;min-height:28px}
+details ul{margin:10px 0 0;padding-left:18px;font-size:14px}
+details li{margin:4px 0}
+.btn{min-height:44px;padding:10px 18px;border-radius:999px;border:2px solid var(--black);background:#fff;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn.pri{background:var(--black);color:#fff}
+.btn.red{border-color:var(--red);color:var(--red-d)}
+.sticky-side{position:sticky;top:76px}
+@media(max-width:899px){.sticky-side{position:static}}
+.mbar{display:none}
+@media(max-width:899px){
+  body.sim-on .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--black);color:#fff;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -6px 20px rgba(0,0,0,.25);font-size:13px}
+  body.sim-on footer{padding-bottom:96px}
+  .mbar b{font-size:18px;display:block}
+  .mbar a{color:#fff;font-weight:700;white-space:nowrap;min-height:44px;display:flex;align-items:center}
+}
+
+/* radar */
+.radar{position:relative;width:100%;max-width:440px;aspect-ratio:1/1;margin:0 auto}
+.radar .r1,.radar .r2,.radar .r3{position:absolute;border-radius:50%}
+.radar .r1{inset:0;background:#fff;border:1px solid var(--g2)}
+.radar .r2{inset:17%;background:var(--g1);border:1px solid var(--g2)}
+.radar .r3{inset:36%;background:var(--black);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;text-align:center;padding:4px}
+.radar .rl{position:absolute;left:50%;transform:translateX(-50%);font-size:12px;color:var(--g3);font-weight:700}
+.sig{position:absolute;transform:translate(-50%,-50%);width:44px;height:44px;border:none;background:transparent;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sig span{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-size:13px;font-weight:700;color:#fff;background:var(--black);box-shadow:0 2px 6px rgba(0,0,0,.25);transition:all .15s}
+.sig.in span{background:var(--red)}
+.sig[aria-pressed="true"] span{width:36px;height:36px;box-shadow:0 0 0 4px #fff,0 0 0 7px var(--red)}
+.steps{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr))}
+.step{border-top:3px solid var(--red);background:var(--g1);border-radius:0 0 10px 10px;padding:12px 14px;font-size:14px}
+.step b{display:block;color:var(--red-d);font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.now{background:var(--red-l);border-radius:12px;padding:14px 16px;font-size:14px}
+.now strong{color:var(--red-d)}
+.urg{font-size:13px;font-weight:700}
+
+/* editor */
+.ed-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ed-note{font-size:14px;background:#FFF4CC;border-radius:12px;padding:12px 14px}
+.ed-note ol{margin:6px 0 0;padding-left:20px}
+.ed-note li{margin:3px 0}
+.fld{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fld span{font-size:12px;font-weight:700;color:var(--g3)}
+.fld input,.fld select,.fld textarea{width:100%;min-height:44px;padding:9px 11px;border:1.5px solid #CFCFCF;border-radius:10px;background:#fff}
+.fld textarea{min-height:70px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--black)}
+.fgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(210px,100%),1fr))}
+.subed{border:1px solid #E2E2E2;border-radius:12px;padding:12px;display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(190px,100%),1fr))}
+.subed .wide{grid-column:1/-1}
+details.ed{border:1px solid var(--g2)}
+details.ed>summary{display:flex;justify-content:space-between;gap:10px;align-items:center}
+details.ed[open]>summary{margin-bottom:12px}
+.sel-rot{border-color:var(--red)!important;background:var(--red-l)!important}
+.sel-gelb{border-color:var(--yellow)!important;background:#FFF6D6!important}
+.sel-gruen{border-color:var(--green)!important;background:#E3F2E9!important}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--black);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;z-index:40;box-shadow:0 10px 30px rgba(0,0,0,.3);max-width:calc(100% - 32px)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* finanz */
+.fin-table{width:100%;border-collapse:collapse;font-size:14px}
+.fin-table th{text-align:left;padding:9px 8px;border-bottom:2px solid var(--black);font-size:13px}
+.fin-table td{padding:10px 8px;border-bottom:1px solid #E2E2E2;vertical-align:top}
+.fin-table small{color:var(--g3);font-size:12px}
+.cells{display:flex;gap:3px}
+.cell{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;font-size:12px;font-weight:700;background:var(--g1);color:#6B6B6B}
+@media(max-width:600px){
+  .fin-table thead{display:none}
+  .fin-table tr{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;padding:10px 0;border-bottom:1px solid #E2E2E2}
+  .fin-table td{border:none;padding:0}
+  .fin-table td:first-child,.fin-table td:last-child{grid-column:1/-1}
+  .fin-table td[data-l]::before{content:attr(data-l);display:block;font-size:11px;color:var(--g3)}
+}
+.bars{display:flex;gap:14px;align-items:flex-start;border-top:2px solid var(--black);min-height:180px}
+.bars>div{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:14px}
+.bars i{display:block;width:100%;max-width:60px;border-radius:0 0 6px 6px;background:var(--black)}
+.bars i.pos{border-radius:6px 6px 0 0;background:var(--green)}
+.zbar{display:flex;height:38px;border-radius:8px;overflow:hidden;font-size:12px;font-weight:700}
+.zbar div{display:flex;align-items:center;padding-left:8px}
+.zmark{position:relative;height:50px}
+.zmark div{position:absolute;top:0;display:flex;flex-direction:column;font-size:12px;white-space:nowrap}
+.zmark span{display:block;background:var(--black);width:2px;height:16px}
+.sp div{display:flex;gap:12px;align-items:baseline;border-top:1px solid #333;padding-top:8px;font-size:13px;color:#E6E6E6}
+.sp b{flex:none;width:88px;font-size:17px}
+.kv{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:6px 0;border-bottom:1px solid #EEE}
+
+footer{border-top:1px solid var(--g2);padding:18px 0 32px;font-size:12px;color:var(--g3)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="stairs" aria-hidden="true"><i style="height:30px;background:#2A2A2A"></i><i style="height:60px;background:#333"></i><i style="height:90px;background:#3D3D3D"></i><i style="height:120px;background:#E3001B"></i></div>
+  <div class="wrap hd">
+    <div class="hd-left">
+      <div class="kicker" id="kicker">Stieglbrauerei zu Salzburg</div>
+      <h1>Frühwarn-Cockpit</h1>
+      <p class="lead">Eine strategische Krise erkennen, bevor sie in der Bilanz steht: sechs Kategorien mit Frühindikatoren, ein Radar für schwache Signale und ein Simulator für die Hebel, die Stiegl selbst in der Hand hat.</p>
+      <div class="fchips" id="fchips"></div>
+    </div>
+    <div class="hd-card">
+      <small id="hdStand">Gesamtlage</small>
+      <div><span class="big num" id="hdRed">–</span> <span style="font-size:20px;font-weight:700">/ 6 rot</span></div>
+      <p id="hdText"></p>
+    </div>
+  </div>
+</header>
+
+<div class="banner" id="banner" hidden>
+  <div class="wrap"><strong>Lokale Änderungen aktiv.</strong><span>Nur in diesem Browser sichtbar, bis „daten.json“ exportiert und hochgeladen ist.</span>
+  <button type="button" class="linkbtn" id="bnEdit">Zum Bearbeitungsmodus</button><button type="button" class="linkbtn" id="bnDrop">Verwerfen</button></div>
+</div>
+
+<nav aria-label="Bereiche">
+  <div class="wrap"><div class="tabs" id="tabs"></div></div>
+</nav>
+
+<main class="wrap">
+
+<!-- COCKPIT -->
+<section id="cockpit" aria-labelledby="h-cockpit">
+  <div class="sec-head">
+    <div>
+      <h2 id="h-cockpit">Übersicht der Frühwarnindikatoren</h2>
+      <p class="sub">Kachel antippen: Darunter stehen Hypothese, Subfaktoren mit Schwelle und die Reaktion bei Rot. Ampel einer Kategorie = schlechtester bewerteter Subfaktor.</p>
+    </div>
+    <div class="opts" role="group" aria-label="Nach Ampel filtern" id="filters"></div>
+  </div>
+  <div class="grid" id="tiles"></div>
+  <p id="noTiles" class="card" style="display:none;margin-top:14px">Keine Kategorie mit diesem Status. Filter „Alle“ wählen.</p>
+  <article class="card stack" id="detail" style="margin-top:16px"></article>
+</section>
+
+<!-- SIMULATOR -->
+<section id="sim" aria-labelledby="h-sim">
+  <div class="sec-head">
+    <div>
+      <h2 id="h-sim">Strategie-Simulator: Was bewirken Stiegls eigene Hebel?</h2>
+      <p class="sub">Das Trinkverhalten bleibt in diesem Modell, wie es heute ist – darauf hat Stiegl keinen Einfluss. Simuliert wird, was Stiegl selbst entscheidet: Premium, Alkoholfrei, junge Zielgruppen, Aktionen, Gastronomie und Export. Zielbild 2028, Wirkung pro Jahr.</p>
+    </div>
+    <button type="button" class="btn" id="simReset">Auf heute zurücksetzen</button>
+  </div>
+  <div class="opts" role="group" aria-label="Szenario wählen" id="presets" style="margin-bottom:14px"></div>
+  <div class="row">
+    <div class="main stack">
+      <div class="grid" id="ctrls" style="grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))"></div>
+      <details id="assump">
+        <summary>So rechnet der Simulator (Annahmen anpassen)</summary>
+        <div id="assumpBody"></div>
+      </details>
+    </div>
+    <aside class="side card dark stack sticky-side" id="simOut" tabindex="-1" style="flex-basis:340px" aria-live="polite"></aside>
+  </div>
+</section>
+
+<!-- RADAR -->
+<section id="radar" aria-labelledby="h-radar">
+  <div class="sec-head">
+    <div>
+      <h2 id="h-radar">Radar schwacher Signale – und was Stiegl tun sollte</h2>
+      <p class="sub">Signale ohne Ampel: beobachten, Relevanz prüfen, bei Bestätigung als Subfaktor ins Cockpit übernehmen. Die Wirkung auf Stiegl ist jeweils eine Hypothese. Punkt antippen.</p>
+    </div>
+  </div>
+  <div class="row" style="align-items:center">
+    <div class="side" style="flex:1 1 300px;max-width:460px;margin:0 auto">
+      <div class="radar" id="radarBox">
+        <div class="r1" aria-hidden="true"></div><div class="r2" aria-hidden="true"></div><div class="r3" aria-hidden="true">Cockpit</div>
+        <span class="rl" style="top:4%" aria-hidden="true">beobachten</span>
+        <span class="rl" style="top:21%" aria-hidden="true">bewerten</span>
+      </div>
+    </div>
+    <article class="main card stack" id="sigDetail"></article>
+  </div>
+  <div class="card stack" style="margin-top:16px">
+    <h3>Prüfpfad für jedes Signal</h3>
+    <div class="steps">
+      <div class="step"><b>1 · Beobachten</b>Strategie und Controlling verfolgen Verbreitung, Studien und eigene Absatzdaten im festen Rhythmus.</div>
+      <div class="step"><b>2 · Relevanz prüfen</b>Hypothese zur Wirkung auf Stiegl formulieren und mit Absatz je Region und Befragungen abgleichen.</div>
+      <div class="step"><b>3 · Auslösen</b>Effekt bestätigt → Subfaktor mit Ampel im Cockpit. Uneindeutig → Marktforschung. Kein Effekt → weiter beobachten.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINANZ -->
+<section id="finanz" aria-labelledby="h-fin">
+  <div class="sec-head">
+    <div>
+      <h2 id="h-fin">Finanzkennzahlen: Die Bilanz hält, die Ertragskraft nicht</h2>
+      <p class="sub">Finanzwirtschaftliche Indikatoren bestätigen im Nachhinein, was schon passiert ist – im Frühwarnsystem stehen sie nur ergänzend. Werte bereinigt um die einmalige Auflösung des Fässerpfands.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="main card">
+      <h3>Rating-Raster</h3>
+      <table class="fin-table" style="margin-top:8px"><thead><tr><th>Kennzahl</th><th id="thA">Vorjahr</th><th id="thB">Aktuell</th><th>Stufe 1 (AAA) bis 6 (D)</th></tr></thead><tbody id="ratings"></tbody></table>
+      <p style="font-size:12px;color:var(--g3);margin:10px 0 0" id="ratNote"></p>
+    </div>
+    <div class="side stack">
+      <div class="card dark stack" style="gap:8px"><h3>Hinter den Zahlen</h3><div class="sp stack" style="gap:8px" id="specials"></div></div>
+      <div class="card"><h3>URG-Kennzahlen (Österreich)</h3>
+        <div class="kv"><span>Eigenmittelquote</span><strong class="num" id="urgE"></strong></div>
+        <div class="kv"><span>Fiktive Schuldentilgungsdauer</span><strong class="num" id="urgS"></strong></div>
+        <div style="font-size:13px;font-weight:700;margin-top:8px" id="urgR"></div></div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:16px">
+    <div class="card" style="flex:1 1 380px;min-width:0"><h3>Jahresergebnis in Mio. €</h3><div class="bars" id="bars" style="margin-top:14px"></div>
+      <p style="font-size:12px;color:var(--g3);margin:10px 0 0" id="barNote"></p></div>
+    <div class="card stack" style="flex:1 1 380px;min-width:0;gap:10px"><h3>Altman Z′</h3>
+      <div class="zbar" aria-hidden="true"><div style="width:35.1%;background:#F7C5CB">Gefahr</div><div style="width:47.7%;background:#FBE7A9">Grauzone</div><div style="width:17.2%;background:#CDE6D6">Sicher</div></div>
+      <div class="zmark" id="zmark"></div>
+      <p style="margin:0;font-size:13px">Z′ für nicht börsennotierte Unternehmen, Grauzone 1,23–2,90. Das Modell stammt aus der US-Industrie – für eine österreichische Brauerei nur ein Zusatzsignal.</p></div>
+  </div>
+</section>
+
+<!-- EDITOR -->
+<section id="edit" aria-labelledby="h-edit">
+  <div class="sec-head">
+    <div>
+      <h2 id="h-edit">Daten bearbeiten</h2>
+      <p class="sub">Änderungen wirken sofort in allen Reitern und werden in diesem Browser gespeichert. Für alle Besucher sichtbar werden sie erst, wenn „daten.json“ exportiert und neben der index.html hochgeladen ist.</p>
+    </div>
+  </div>
+  <div class="stack">
+    <div class="card stack">
+      <div class="ed-bar">
+        <button type="button" class="btn pri" id="exJson">daten.json exportieren</button>
+        <button type="button" class="btn" id="imBtn">Datei importieren (JSON oder CSV)</button>
+        <input type="file" id="imFile" accept=".json,.csv,application/json,text/csv" class="sr" aria-label="Datei importieren">
+        <button type="button" class="btn" id="exCsv">Subfaktoren als CSV (Excel)</button>
+        <button type="button" class="btn red" id="edReset">Lokale Änderungen verwerfen</button>
+      </div>
+      <div class="ed-note">
+        <strong>So kommen neue Daten ins Cockpit</strong>
+        <ol>
+          <li>Werte unten ändern – oder die CSV-Liste in Excel bearbeiten (Messwert und Status) und wieder importieren.</li>
+          <li>„daten.json exportieren“ – die Datei landet in den Downloads.</li>
+          <li>Die Datei auf dem Webserver neben der index.html ersetzen. Danach sehen alle Besucher den neuen Stand.</li>
+        </ol>
+        <div style="margin-top:6px" id="srcInfo"></div>
+      </div>
+    </div>
+    <div id="edBody" class="stack"></div>
+  </div>
+</section>
+
+</main>
+
+<div class="mbar" id="mbar" aria-label="Simulator-Ergebnis"></div>
+<footer>
+  <div class="wrap"><span>Studienprojekt CTM.26 · FH Kufstein Tirol · Jahresabschlussanalyse &amp; Reorganisationsbedarf. Keine Veröffentlichung der Stieglbrauerei zu Salzburg GmbH. Schwellen und Simulator dienen der Illustration, sie sind keine Prognose.</span>
+  <button type="button" class="linkbtn" id="edToggle">Bearbeitungsmodus</button></div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var $ = function(id){ return document.getElementById(id); };
+var LBL = { rot:'Rot', gelb:'Gelb', gruen:'Grün', offen:'unbekannt' };
+var RANK = { rot:3, gelb:2, gruen:1, offen:0 };
+function esc(v){ return String(v == null ? '' : v).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
+function pill(s, txt){ return '<span class="pill p-' + (LBL[s] ? s : 'offen') + '">' + esc(txt || LBL[s] || LBL.offen) + '</span>'; }
+function worst(list){ var w = 'offen'; list.forEach(function(s){ if ((RANK[s] || 0) > RANK[w]) w = s; }); return w; }
+function fmt(v, d){ var t = Math.abs(v).toFixed(d).replace('.', ','); return (v < 0 ? '−' : '') + t; }
+function sgn(v, d){ return (v > 0.0001 ? '+' : (v < -0.0001 ? '−' : '±')) + Math.abs(v).toFixed(d).replace('.', ','); }
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function toast(msg){ var t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg; document.body.appendChild(t); setTimeout(function(){ t.remove(); }, 3200); }
+
+/* =====================================================================
+   DATEN – alles, was im Bearbeitungsmodus geändert werden kann.
+   Die gleiche Struktur steht in daten.json.
+   ===================================================================== */
+var DEFAULT = {
+ version: 1,
+ stand: 'Oktober 2026',
+ fin: [
+  { l:'Eigenkapitalquote 2025', v:'56,8 %', n:'Rating AAA', t:'gut' },
+  { l:'ROI 2025, bereinigt', v:'−3,5 %', n:'Stufe 6 von 6', t:'schlecht' },
+  { l:'Altman Z′ 2025', v:'1,69', n:'Grauzone', t:'mittel' }
+ ],
+ cats: [
+ { nr:'1', name:'Gastronomie', q:'Hält der Gastronomie-Kanal?', key:'−4 %', kl:'Fassbier-Absatz Österreich 2025', lead:'1–2 Jahre', owner:'Vertrieb Gastronomie',
+   chain:['Weniger Fassbier und weniger aktive Gastro-Kunden','Fixkosten in Logistik und Vertrieb bleiben','Ergebnis sinkt in 1–2 Jahren'],
+   act:'Vertrieb Gastronomie prüft Abgänge je Region sofort; Geschäftsführung entscheidet im nächsten Jour fixe über das Partnerprogramm.',
+   subs:[
+    { n:'Fassbier-Absatz (Markt)', v:'−4 % ggü. Vorjahr (2025)', m:'Branchenstatistik', rh:'monatlich', th:'≥ VJ / bis −3 % / < −3 %', s:'rot' },
+    { n:'Aktive Gastro-Kunden', v:'', m:'CRM', rh:'monatlich', th:'≥ VJ / bis −3 % / < −5 %', s:'offen' },
+    { n:'Hektoliter je Gastro-Kunde', v:'', m:'ERP', rh:'monatlich', th:'≥ VJ / bis −3 % / < −3 %', s:'offen' },
+    { n:'Insolvenzen Gastronomie und Beherbergung', v:'807 (2025, −1 %)', m:'Insolvenzstatistik', rh:'quartalsweise', th:'sinkend / ± 5 % / steigend', s:'gelb' },
+    { n:'Zahlungsdauer Gastro-Kunden', v:'', m:'Debitorenbuchhaltung', rh:'monatlich', th:'≤ 30 / 30–45 / > 45 Tage', s:'offen' } ] },
+ { nr:'2', name:'Handel & Preis', q:'Behält Stiegl Preismacht im Handel?', key:'≈ 70 %', kl:'Bier im Handel in Aktion verkauft (2024)', lead:'≈ 1 Jahr', owner:'Key Account Management',
+   chain:['Mehr Absatz über Aktionen','Nettoerlös je Hektoliter sinkt','Marge sinkt bei gleicher Menge'],
+   act:'Key Account deckelt das Aktionsbudget zur nächsten Verhandlung; Geschäftsführung entscheidet über Konditionen je Partner.',
+   subs:[
+    { n:'Aktionsanteil Bier im Handel', v:'≈ 70 %, steigend', m:'Handelspanel', rh:'monatlich', th:'< 40 % / 40–50 % / > 50 %', s:'rot' },
+    { n:'Nettoerlös je Hektoliter', v:'', m:'Fakturierung', rh:'monatlich', th:'≥ VJ / bis −2 % / < −2 %', s:'offen' },
+    { n:'Eigenmarken im Premium-Segment', v:'', m:'Regal-Tracking', rh:'quartalsweise', th:'stabil / + 1 PP / > + 2 PP', s:'offen' },
+    { n:'Umsatzanteil Top-2-Handelspartner', v:'', m:'Kundenstatistik', rh:'quartalsweise', th:'< 40 % / 40–50 % / > 50 %', s:'offen' } ] },
+ { nr:'3', name:'Konsumtrend', q:'Wie viel und was trinkt Österreich?', key:'97,6 l', kl:'Bier pro Kopf 2024/25, −5 %', lead:'2–5 Jahre', owner:'Produktmanagement, Geschäftsführung',
+   chain:['Weniger Bier pro Kopf','Kernmarkt schrumpft','Auslastung sinkt über Jahre'],
+   act:'Produktmanagement legt im nächsten Quartalsgespräch einen Alkoholfrei-Plan vor; Geschäftsführung entscheidet über Kapazität.',
+   subs:[
+    { n:'Pro-Kopf-Verbrauch Bier', v:'97,6 l (−5 %)', m:'Versorgungsbilanz', rh:'jährlich', th:'> −1 % / −1 bis −3 % / < −3 %', s:'rot' },
+    { n:'Anteil Alkoholfrei am Markt', v:'≈ 4 %; DE/CZ ≈ 10 %', m:'Branchenstatistik', rh:'quartalsweise', th:'Abstand zu DE/CZ sinkt / stabil / wächst', s:'gelb' },
+    { n:'Stiegl im Alkoholfrei-Segment', v:'stärkstes Wachstum 2025', m:'Marktdaten', rh:'quartalsweise', th:'≥ Markt / bis −1 PP / < −1 PP', s:'gruen' },
+    { n:'Lebenszeitabstinenz Jugendlicher', v:'18 %, seit 2007 vervierfacht', m:'Jugendstudie', rh:'alle 4–5 Jahre', th:'sinkend / stabil / steigend', s:'rot' } ] },
+ { nr:'4', name:'Marke & Kunden', q:'Erreicht Stiegl die nächste Generation?', key:'?', kl:'Benötigt: Markentracking', lead:'1–3 Jahre', owner:'Marketing',
+   chain:['Junge wählen seltener Stiegl','Wiederkauf sinkt','Absatz von morgen fehlt'],
+   act:'Marketing startet innerhalb eines Quartals Zielgruppentests mit 18- bis 29-Jährigen; Ergebnis und Maßnahmen ins nächste Quartalsgespräch.',
+   subs:[
+    { n:'Markenpräferenz 18–29 J. vs. 50+', v:'', m:'Brand-Health-Tracking', rh:'halbjährlich', th:'steigend / stabil / − 5 Punkte', s:'offen' },
+    { n:'Kaufabsicht und Wiederkaufrate', v:'', m:'Marktforschung', rh:'quartalsweise', th:'≥ VJ / bis −2 PP / < −2 PP', s:'offen' },
+    { n:'Social-Media-Reichweite bei Jungen', v:'', m:'Social Listening', rh:'monatlich', th:'≥ VJ / stabil / sinkend', s:'offen' },
+    { n:'Präsenz bei Events und Anlässen', v:'', m:'Sponsoring-Controlling', rh:'quartalsweise', th:'≥ VJ / bis −10 % / < −10 %', s:'offen' } ] },
+ { nr:'5', name:'Umfeld', q:'Was ändert sich von außen?', key:'−23 %', kl:'Dosenbier 2025 nach Einwegpfand', lead:'1–3 Jahre', owner:'Geschäftsführung, Einkauf, Export',
+   chain:['Pfand, Zoll, Klima, Energie','Kosten steigen','Schocks in 1–3 Jahren'],
+   act:'Einkauf sichert Gerste und Energie ab, Export prüft Ausweichmärkte; die Geschäftsführung entscheidet im Quartalsgespräch über die Gebinde.',
+   subs:[
+    { n:'Regulierung: Einwegpfand', v:'Dosenbier −23 % (2025)', m:'Branchenstatistik', rh:'quartalsweise', th:'> −5 % / −5 bis −15 % / < −15 %', s:'rot' },
+    { n:'Handelspolitik: US-Zoll', v:'10 % Zoll · USA = 40 % des Exports', m:'Export', rh:'quartalsweise', th:'kein Zoll / ≤ 10 % / > 10 %', s:'gelb' },
+    { n:'Klima: Braugerste und Hitzetage', v:'', m:'Ernteprognosen, Wetterdienst', rh:'saisonal', th:'Preis < +5 % / +5–15 % / > +15 %', s:'offen' },
+    { n:'Energie- und Glaspreise ggü. Plan', v:'', m:'Einkauf', rh:'monatlich', th:'< +5 % / +5–15 % / > +15 %', s:'offen' } ] },
+ { nr:'6', name:'Organisation', q:'Gelingt die Neuausrichtung?', key:'?', kl:'Benötigt: Umsetzungsstand', lead:'1–3 Jahre', owner:'Geschäftsführung, Eigentümer',
+   chain:['Umsetzung verzögert','Maßnahmen greifen spät','Eigentümer müssen nachschießen'],
+   act:'Die Geschäftsführung schärft die Meilensteine sofort nach; bei anhaltendem Verzug Strategieklausur mit den Eigentümern.',
+   subs:[
+    { n:'Umsetzung Neuausrichtung', v:'Ziel 2026: Verlust halbieren', m:'Projektcontrolling', rh:'quartalsweise', th:'im Plan / < 1 Quartal Verzug / > 1 Quartal', s:'offen' },
+    { n:'Fluktuation Schlüsselfunktionen', v:'', m:'HR', rh:'quartalsweise', th:'< 5 % / 5–10 % / > 10 %', s:'offen' },
+    { n:'Umsatzanteil neuer Produkte', v:'', m:'Controlling', rh:'jährlich', th:'> 10 % / 5–10 % / < 5 %', s:'offen' },
+    { n:'Nachfolge und Governance', v:'', m:'Eigentümer', rh:'jährlich', th:'geregelt / in Arbeit / offen', s:'offen' } ] }
+ ],
+ sigs: [
+ { n:'1', t:'GLP-1-Abnehmspritzen', short:'GLP-1', st:'bewerten', x:70, y:30,
+   obs:'Studie: Tage mit starkem Konsum sinken von 17 auf 5 pro Monat (Placebo 9). Die Wirkung auf den Biermarkt ist offen.',
+   hyp:'Breite Nutzung senkt den Bierkonsum in Kernzielgruppen.',
+   beo:'Strategie & Controlling, halbjährlich: Verbreitung der Präparate in Österreich, neue Studien, Absatz je Region.',
+   aus:'Befragung zeigt weniger Konsum bei Nutzern → Subfaktor in Kategorie 3 mit Ampel. Uneindeutig → Marktforschung.',
+   han:'Produktmanagement prüft kalorienarme und alkoholfreie Varianten; Geschäftsführung entscheidet über Budget.', urg:'mittel',
+   now:'Nächste Konsumentenbefragung um Fragen zu GLP-1 ergänzen – geringe Kosten, klare Datenbasis.' },
+ { n:'2', t:'Gen Alpha wird 16', short:'Gen Alpha', st:'beobachten', x:18, y:36,
+   obs:'Die ersten Jahrgänge der Generation Alpha erreichen das Mindestalter für Bier; Konsumdaten fehlen. Abstinenz Jugendlicher 18 %, seit 2007 vervierfacht.',
+   hyp:'Der Abstinenztrend der Gen Z setzt sich fort – Stiegl verliert Kundschaft, bevor sie entsteht.',
+   beo:'Marketing, jährlich: Markenpräferenz 18–29 aus dem Brand-Health-Tracking; neue Jugendstudien bei Erscheinen.',
+   aus:'Präferenz der 18- bis 29-Jährigen unter dem Gesamtwert oder zweimal in Folge fallend → Kategorie 4 auf Gelb.',
+   han:'Marketing baut Alkoholfrei und Erlebnis (Brauwelt, Events) für junge Erwachsene aus; Junior Board testet Ideen.', urg:'hoch',
+   now:'Jugendschutz zuerst: Alkoholisches nur an Erwachsene bewerben, Markenbindung über Alkoholfrei und Erlebnis.' },
+ { n:'3', t:'Alkoholverbote bei Hitze', short:'Hitzeverbote', st:'beobachten', x:84, y:62,
+   obs:'Paris, Juni 2026: Verkauf zum Mitnehmen und Konsum im öffentlichen Raum während der Hitzewarnung untersagt.',
+   hyp:'Ähnliche Regeln in österreichischen Städten oder bei Großveranstaltungen träfen Feste, Open Air und den Sommerabsatz.',
+   beo:'Geschäftsführung mit dem Brauereiverband, quartalsweise: Beschlüsse von Städten und Veranstaltern; Hitzetage.',
+   aus:'Erste Stadt oder Großveranstaltung in Österreich beschließt ein Verbot → Subfaktor in Kategorie 5, Szenario fürs Festgeschäft.',
+   han:'Vertrieb Events verankert Alkoholfrei in Festverträgen; Geschäftsführung bringt ihre Position über den Verband ein.', urg:'niedrig',
+   now:'Anteil von Sommer- und Festgeschäft am Absatz beziffern – zeigt, wie groß das Risiko wirklich ist.' },
+ { n:'4', t:'Gerste in Extremjahren', short:'Gerste', st:'bewerten', x:33, y:76,
+   obs:'Modellrechnung: In Jahren mit extremer Hitze und Dürre sinkt der Gerstenertrag weltweit um 3 bis 17 %.',
+   hyp:'Extremjahre verknappen und verteuern Braugerste; Kosten und Qualität schwanken stärker.',
+   beo:'Einkauf, vor jeder Ernte (Juni/Juli): Ernteprognosen, Braugerstenpreis, Hitzetage.',
+   aus:'Prognose deutlich unter Vorjahr oder Preis über Plan → Einkauf sichert Mengen, Controlling rechnet das Kostenszenario.',
+   han:'Einkauf streut Lieferanten und Herkunftsregionen und prüft mehrjährige Verträge; Produktion prüft Rezeptur-Spielräume.', urg:'mittel',
+   now:'Ein Dürrejahr als Mengen- und Preisszenario in die Planung 2027 aufnehmen.' },
+ { n:'5', t:'US-Zoll', short:'US-Zoll', st:'übernommen', x:57, y:57,
+   obs:'10 % Zusatzzoll auf EU-Waren; die USA nehmen rund 40 % des Stiegl-Exports ab.',
+   hyp:'Höhere Zölle drücken Absatz oder Marge im wichtigsten Exportmarkt.',
+   beo:'Bestätigt: steht als Subfaktor in Kategorie 5 und wird quartalsweise im Cockpit gemessen.',
+   aus:'Zoll über 10 % → Kategorie 5 auf Rot.',
+   han:'Export streut die Märkte und prüft Ausweichmärkte; Geschäftsführung entscheidet im Quartalsgespräch.', urg:'mittel',
+   now:'Im Simulator zeigen, wie viel Umsatz am US-Markt hängt.' }
+ ],
+ sim: { umsatz:90.2, absatz:1.0, ergebnis:-2.8, export:12, handel:70, gastro:28, prem:5, af:4, promo:70, usa:40 },
+ finanz: {
+  jahrA:'2024', jahrB:'2025',
+  ratings: [
+   { n:'Eigenkapitalquote', f:'Eigenkapital ÷ Gesamtkapital', a:'49,5 %', b:'56,8 %', sa:1, sb:1 },
+   { n:'ROI', f:'bereinigtes EBIT ÷ Gesamtkapital', a:'−1,0 %', b:'−3,5 %', sa:6, sb:6 },
+   { n:'Interest Cover', f:'bereinigtes EBITDA ÷ Zinsaufwand', a:'7,3', b:'9,0', sa:4, sb:4 },
+   { n:'Working-Capital-Ratio', f:'Umlaufvermögen ÷ kurzfristige Verbindlichkeiten', a:'164 %', b:'204 %', sa:3, sb:1 },
+   { n:'Debt Coverage (Näherung)', f:'Nettoverschuldung ÷ bereinigtes EBITDA', a:'3,6 J.', b:'3,0 J.', sa:2, sb:1 }
+  ],
+  specials: [
+   { v:'+10,0 Mio.', t:'Zuschuss der Eigentümer an die Vertriebstochter, Dezember 2025 – im Jahresabschluss abgeschrieben', tone:'schlecht' },
+   { v:'−7,5 Mio.', t:'Jahresverlust der Vertriebstochter 2025 (2024: −4,5)', tone:'schlecht' },
+   { v:'+3,6 Mio.', t:'einmalige Auflösung Fässerpfand im Betriebserfolg', tone:'mittel' },
+   { v:'−5,5 %', t:'Umsatz 2025 ggü. 2024 (90,2 statt 95,4 Mio. €)', tone:'schlecht' }
+  ],
+  results: [ { y:'2022', v:-1.4 }, { y:'2023', v:-5.0 }, { y:'2024', v:-5.3 }, { y:'2025', v:-9.2 } ],
+  resultNote:'2025 inklusive −10,0 Mio. € Abschreibung auf den Zuschuss an die Vertriebstochter.',
+  emq:56.8, sdt:4.9, zA:1.49, zB:1.69
+ }
+};
+
+/* ---------------- LADEN / SPEICHERN ---------------- */
+var LS = 'stiegl-cockpit-daten-v1';
+var DATA = clone(DEFAULT), SOURCE = 'eingebettet', PUBLISHED = clone(DEFAULT), LOCAL = false;
+function lsGet(){ try { return localStorage.getItem(LS); } catch (e) { return null; } }
+function lsSet(v){ try { if (v === null) localStorage.removeItem(LS); else localStorage.setItem(LS, v); return true; } catch (e) { return false; } }
+function valid(d){
+  return d && Array.isArray(d.cats) && d.cats.length === 6 && d.cats.every(function(c){ return Array.isArray(c.subs); }) &&
+    Array.isArray(d.sigs) && d.sim && Array.isArray(d.fin);
+}
+function normalize(d){
+  var out = clone(DEFAULT);
+  ['stand','version'].forEach(function(k){ if (d[k] != null) out[k] = d[k]; });
+  out.fin = d.fin; out.cats = d.cats; out.sigs = d.sigs;
+  if (d.finanz && Array.isArray(d.finanz.ratings) && Array.isArray(d.finanz.results)) out.finanz = Object.assign(out.finanz, d.finanz);
+  Object.keys(out.sim).forEach(function(k){ if (typeof d.sim[k] === 'number' && isFinite(d.sim[k])) out.sim[k] = d.sim[k]; });
+  out.cats.forEach(function(c){ c.subs.forEach(function(r){ if (!LBL[r.s]) r.s = 'offen'; }); });
+  return out;
+}
+function save(){
+  LOCAL = true;
+  if (!lsSet(JSON.stringify(DATA))) toast('Speichern im Browser nicht möglich – bitte daten.json exportieren.');
+  $('banner').hidden = false;
+}
+(function initLoad(){
+  var raw = lsGet();
+  if (raw) { try { var d = JSON.parse(raw); if (valid(d)) { DATA = normalize(d); LOCAL = true; } } catch (e) {} }
+})();
+
+/* ---------------- TABS ---------------- */
+var state = { tab:'cockpit', sel:0, filter:'alle', sig:0, edit:false };
+function tabList(){
+  var t = [['cockpit','Cockpit'],['sim','Simulator'],['radar','Radar & Empfehlungen'],['finanz','Finanzkennzahlen']];
+  if (state.edit) t.push(['edit','Daten bearbeiten']);
+  return t;
+}
+function renderTabs(){
+  $('tabs').innerHTML = tabList().map(function(t){
+    return '<button type="button" class="chip' + (t[0] === 'edit' ? ' edit' : '') + '" data-tab="' + t[0] + '" aria-pressed="' + (state.tab === t[0]) + '">' + t[1] + '</button>';
+  }).join('');
+  ['cockpit','sim','radar','finanz','edit'].forEach(function(id){ $(id).classList.toggle('on', state.tab === id); });
+  document.body.classList.toggle('sim-on', state.tab === 'sim');
+  $('edToggle').textContent = state.edit ? 'Bearbeitungsmodus beenden' : 'Bearbeitungsmodus';
+}
+function go(tab){
+  state.tab = tab;
+  if (history.replaceState) history.replaceState(null, '', '#' + (tab === 'edit' ? 'bearbeiten' : tab));
+  renderTabs();
+  if (tab === 'edit') renderEditor();
+}
+$('tabs').addEventListener('click', function(e){
+  var b = e.target.closest('[data-tab]'); if (!b) return;
+  go(b.dataset.tab); b.scrollIntoView({ block:'nearest', inline:'center' });
+});
+$('edToggle').addEventListener('click', function(){
+  state.edit = !state.edit;
+  go(state.edit ? 'edit' : 'cockpit');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+$('bnEdit').addEventListener('click', function(){ state.edit = true; go('edit'); window.scrollTo({ top:0 }); });
+$('bnDrop').addEventListener('click', dropLocal);
+
+/* ---------------- HEADER ---------------- */
+function catStatus(c){ return worst(c.subs.map(function(r){ return r.s; })); }
+function renderHeader(){
+  $('kicker').textContent = 'Stieglbrauerei zu Salzburg · Stand ' + DATA.stand;
+  $('hdStand').textContent = 'Gesamtlage ' + DATA.stand;
+  var st = DATA.cats.map(catStatus);
+  var red = st.filter(function(s){ return s === 'rot'; }).length;
+  var unk = st.filter(function(s){ return s === 'offen'; }).length;
+  $('hdRed').textContent = red;
+  $('hdText').textContent = (unk ? (unk === 1 ? 'Eine Kategorie' : (unk === 2 ? 'Zwei Kategorien' : unk + ' Kategorien')) + ' mit Status unbekannt – dort fehlen interne Daten. ' : '') +
+    (red >= 2 ? 'Mehrere rote Kategorien: Strategieklausur mit den Eigentümern.' : (red === 1 ? 'Eine rote Kategorie: Entscheidung der Geschäftsführung.' : 'Keine rote Kategorie: weiter beobachten.'));
+  $('fchips').innerHTML = DATA.fin.map(function(f){
+    return '<div class="fchip"><span class="l">' + esc(f.l) + '</span><span class="v num">' + esc(f.v) + '</span><span class="n t-' + esc(f.t) + '">' + esc(f.n) + '</span></div>';
+  }).join('');
+}
+
+/* ---------------- COCKPIT ---------------- */
+function renderCockpit(){
+  var F = [['alle','Alle'],['rot','Rot'],['gelb','Gelb'],['gruen','Grün'],['offen','unbekannt']];
+  $('filters').innerHTML = F.map(function(f){ return '<button type="button" class="chip sm" data-f="' + f[0] + '" aria-pressed="' + (state.filter === f[0]) + '">' + f[1] + '</button>'; }).join('');
+  var vis = DATA.cats.map(function(c, i){ return [c, i]; }).filter(function(p){ return state.filter === 'alle' || catStatus(p[0]) === state.filter; });
+  $('noTiles').style.display = vis.length ? 'none' : 'block';
+  $('tiles').innerHTML = vis.map(function(p){
+    var c = p[0], i = p[1], s = catStatus(c);
+    return '<button type="button" class="tile" data-c="' + i + '" aria-pressed="' + (state.sel === i) + '">' +
+      '<span class="top"><span class="nm"><b>' + esc(c.nr) + '</b>  ' + esc(c.name) + '</span>' + pill(s) + '</span>' +
+      '<span class="q">' + esc(c.q) + '</span>' +
+      '<span class="key num" style="color:' + (s === 'rot' ? '#C40018' : '#141414') + '">' + esc(c.key) + '</span>' +
+      '<span class="kl">' + esc(c.kl) + '</span>' +
+      '<span class="dots">' + c.subs.map(function(r){ return '<span class="dot d-' + esc(r.s) + '" title="' + esc(r.n) + ': ' + LBL[r.s] + '"></span>'; }).join('') +
+      '<span style="margin-left:4px">' + c.subs.length + ' Subfaktoren · Vorlauf ' + esc(c.lead) + '</span></span></button>';
+  }).join('');
+  var c = DATA.cats[state.sel];
+  $('detail').innerHTML =
+    '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline">' +
+      '<h3 style="font-size:22px"><span style="color:var(--red)">' + esc(c.nr) + '</span>  ' + esc(c.name) + ' ' + pill(catStatus(c)) + '</h3>' +
+      '<span style="font-size:14px;color:var(--g3)">Zuständig: ' + esc(c.owner) + '</span></div>' +
+    '<div class="stack" style="gap:8px"><span class="label">Hypothese</span><div class="chain">' +
+      c.chain.map(function(t, j){ return '<div><span>' + (j + 1) + '</span>' + esc(t) + '</div>'; }).join('') + '</div></div>' +
+    '<div class="stack" style="gap:8px"><span class="label">Subfaktoren</span><div class="subs">' +
+      c.subs.map(function(r){
+        return '<div class="subc"><div class="t"><span>' + esc(r.n) + '</span>' + pill(r.s) + '</div>' +
+          '<div class="v num">' + (r.v ? esc(r.v) : '<span style="color:var(--g3);font-weight:400;font-size:14px">Daten fehlen noch</span>') + '</div>' +
+          '<dl><dt>Messung</dt><dd>' + esc(r.m) + ', ' + esc(r.rh) + '</dd><dt>Schwelle</dt><dd>' + esc(r.th) + '</dd></dl></div>';
+      }).join('') + '</div><span style="font-size:12px;color:var(--g3)">Schwelle: Grün / Gelb / Rot</span></div>' +
+    '<div class="redbox"><strong>Bei Rot: </strong>' + esc(c.act) + '</div>';
+}
+$('filters').addEventListener('click', function(e){ var b = e.target.closest('[data-f]'); if (!b) return; state.filter = b.dataset.f; renderCockpit(); });
+$('tiles').addEventListener('click', function(e){
+  var b = e.target.closest('[data-c]'); if (!b) return;
+  state.sel = Number(b.dataset.c); renderCockpit();
+  if (window.innerWidth < 900) $('detail').scrollIntoView({ behavior:'smooth', block:'start' });
+});
+
+/* ---------------- SIMULATOR ----------------
+   Ein eingeschwungenes Jahr (Zielbild 2028) im Vergleich zu heute.
+   Marktvolumen und Trinkverhalten bleiben konstant.                 */
+var A0 = { up:40, disc:25, cv:65, cprem:15, caf:10, incr:50, promoEl:2, ytVol:1 };
+var A = Object.assign({}, A0);
+var YOUTH = [ { l:'wie heute', cost:0, vol:0, pts:0 }, { l:'ausbauen', cost:0.5, vol:0.5, pts:25 }, { l:'Offensive', cost:1.0, vol:1.0, pts:45 } ];
+var GASTRO = [ { l:'wie heute', cost:0, vol:0 }, { l:'Partnerprogramm', cost:0.4, vol:2 }, { l:'+ Logistik je Region', cost:0.1, vol:3 } ];
+function base(){ var s = DATA.sim; return { prem:s.prem, af:s.af, promo:s.promo, youth:0, gastro:0, usa:s.usa }; }
+var sim = base();
+function shares(){
+  var S = DATA.sim, inl = 1 - S.export / 100;
+  var h = inl * S.handel / 100, g = inl * S.gastro / 100;
+  return { handel:h, gastro:g, other:Math.max(0, inl - h - g), exp:S.export / 100 };
+}
+function calc(s){
+  var S = DATA.sim, B = base(), sh = shares();
+  var prem = s.prem / 100, af = s.af / 100;
+  var handelPF = 1 - (s.promo / 100) * (A.disc / 100);
+  var mixP = (1 - prem - af) + prem * (1 + A.up / 100) + af;
+  var mixC = (1 - prem - af) + prem * (1 + A.cprem / 100) + af * (1 + A.caf / 100);
+  var hpf0 = 1 - (B.promo / 100) * (A.disc / 100);
+  var mixP0 = (1 - B.prem / 100 - B.af / 100) + (B.prem / 100) * (1 + A.up / 100) + B.af / 100;
+  var ps = S.umsatz / (S.absatz * mixP0 * (sh.handel * hpf0 + sh.gastro + sh.other + sh.exp));
+  var vH = sh.handel * (1 + (A.promoEl / 100) * (s.promo - B.promo) / 10);
+  var vG = sh.gastro * (1 + GASTRO[s.gastro].vol / 100);
+  var incr = (s.af - B.af) / 100 * (A.incr / 100);
+  var extra = incr + YOUTH[s.youth].vol / 100 * A.ytVol;
+  var volRel = vH + vG + sh.other + sh.exp + extra;
+  var vol = S.absatz * volRel;
+  var revenue = ps * mixP * S.absatz * (vH * handelPF + vG + sh.other + sh.exp + extra);
+  var varCost = ps * (A.cv / 100) * mixC * vol;
+  var prog = YOUTH[s.youth].cost + GASTRO[s.gastro].cost;
+  var expRev = revenue * sh.exp / volRel;
+  return { vol:vol, revenue:revenue, db:revenue - varCost - prog, dbhl:(revenue - varCost) / vol, erl:revenue / vol, usRev:expRev * s.usa / 100 };
+}
+var CTRLS = [
+ { k:'prem', type:'range', min:0, max:25, step:1, l:'Premium-Segment ausbauen', h:'Anteil Premium und Spezialitäten am Absatz (Kategorie 2 und 3)', unit:'%' },
+ { k:'af', type:'range', min:0, max:20, step:1, l:'Alkoholfrei-Offensive', h:'Anteil Alkoholfrei am Stiegl-Absatz – spricht auch junge Erwachsene an (Kategorie 3 und 4)', unit:'%' },
+ { k:'youth', type:'opt', opts:YOUTH, l:'Junge Erwachsene gewinnen', h:'Erlebnis (Brauwelt, Events), Junior Board 18–29, Ansprache über Alkoholfrei (Kategorie 4)' },
+ { k:'promo', type:'range', min:30, max:90, step:1, l:'Aktionsanteil im Handel', h:'Wie viel Stiegl im Handel über Aktionen verkauft (Kategorie 2)', unit:'%' },
+ { k:'gastro', type:'opt', opts:GASTRO, l:'Gastronomie stärken', h:'Partnerprogramm Leitbetriebe, Logistik der Vertriebstochter (Kategorie 1)' },
+ { k:'usa', type:'range', min:15, max:50, step:1, l:'Exportmärkte streuen', h:'Anteil der USA am Export – bestimmt das Zollrisiko (Kategorie 5)', unit:'%' }
+];
+function presets(){
+  var B = base();
+  return [
+   ['heute','Heute', B],
+   ['wert','Wert statt Menge', Object.assign({}, B, { prem:Math.max(B.prem, 12), promo:Math.min(B.promo, 50) })],
+   ['jung','Junge Generation', Object.assign({}, B, { af:Math.max(B.af, 12), youth:2 })],
+   ['alle','Alle Hebel', Object.assign({}, B, { prem:Math.max(B.prem, 12), af:Math.max(B.af, 12), promo:Math.min(B.promo, 50), youth:1, gastro:2, usa:Math.min(B.usa, 30) })]
+  ];
+}
+function renderCtrls(){
+  var B = base();
+  $('presets').innerHTML = '<span class="label" style="align-self:center;margin-right:4px">Szenario</span>' + presets().map(function(p){
+    return '<button type="button" class="chip sm" data-p="' + p[0] + '" aria-pressed="false">' + p[1] + '</button>';
+  }).join('');
+  $('ctrls').innerHTML = CTRLS.map(function(c){
+    var changed = sim[c.k] !== B[c.k];
+    var head = '<div class="h"><' + (c.type === 'range' ? 'label for="r-' + c.k + '"' : 'span class="lb" id="l-' + c.k + '"') + '>' + c.l + '</' + (c.type === 'range' ? 'label' : 'span') + '>' +
+      (changed ? '<span class="pill p-neutral">geändert</span>' : '') + '</div><div class="hint">' + c.h + '</div>';
+    if (c.type === 'range') {
+      return '<div class="ctrl">' + head + '<div class="val num" id="v-' + c.k + '">' + sim[c.k] + ' ' + c.unit + '</div>' +
+        '<input type="range" id="r-' + c.k + '" data-k="' + c.k + '" min="' + c.min + '" max="' + c.max + '" step="' + c.step + '" value="' + sim[c.k] + '">' +
+        '<div class="ist">Heute: ' + B[c.k] + ' ' + c.unit + '</div></div>';
+    }
+    return '<div class="ctrl">' + head + '<div class="opts" role="group" aria-labelledby="l-' + c.k + '">' +
+      c.opts.map(function(o, i){ return '<button type="button" class="chip sm" data-k="' + c.k + '" data-v="' + i + '" aria-pressed="' + (sim[c.k] === i) + '">' + o.l + '</button>'; }).join('') +
+      '</div><div class="ist">Kosten pro Jahr: ' + (c.opts[sim[c.k]].cost ? fmt(c.opts[sim[c.k]].cost, 1) + ' Mio. € (Annahme)' : 'keine zusätzlichen') + '</div></div>';
+  }).join('');
+  syncPresets();
+}
+function syncPresets(){
+  var P = presets();
+  Array.prototype.forEach.call(document.querySelectorAll('#presets [data-p]'), function(b){
+    var p = P.filter(function(x){ return x[0] === b.dataset.p; })[0];
+    b.setAttribute('aria-pressed', CTRLS.every(function(c){ return sim[c.k] === p[2][c.k]; }));
+  });
+}
+function kpi(label, val, delta, unitDelta){
+  var cls = Math.abs(delta) < 0.05 ? 'flat' : (delta > 0 ? 'up' : 'down');
+  return '<div class="kpi"><div class="k">' + label + '</div><div class="v num">' + val.replace(/ (.+)$/, '<small>$1</small>') + '</div><div class="d num ' + cls + '">' + sgn(delta, 1) + unitDelta + ' ggü. heute</div></div>';
+}
+function renderOut(){
+  var B = base(), b = calc(B), s = calc(sim), R0 = DATA.sim.ergebnis;
+  var dDB = s.db - b.db, result = R0 + dDB;
+  var sAkt = sim.promo < 40 ? 'gruen' : (sim.promo <= 50 ? 'gelb' : 'rot');
+  var dErl = (s.erl / b.erl - 1) * 100;
+  var sErl = dErl >= 0 ? 'gruen' : (dErl >= -2 ? 'gelb' : 'rot');
+  var s2 = worst([sAkt, sErl]);
+  var reach = Math.min(100, Math.max(0, (sim.af - B.af) * 4 + YOUTH[sim.youth].pts));
+  var reachL = reach >= 60 ? 'stark' : (reach >= 25 ? 'mittel' : (reach > 0 ? 'schwach' : 'kein zusätzlicher Hebel'));
+  var s5 = sim.usa > 35 ? 'gelb' : 'gruen';
+  var st1 = catStatus(DATA.cats[0]), st3 = catStatus(DATA.cats[2]), st4 = catStatus(DATA.cats[3]), st6 = catStatus(DATA.cats[5]);
+  var resCol = result >= 0 ? ['#1E6B3F','#FFFFFF','Gewinnzone erreicht'] : (result > R0 + 0.05 ? ['#F2B700','#141414','Verlust kleiner, aber noch kein Gewinn'] : ['#E3001B','#FFFFFF','Verlust bleibt']);
+  $('simOut').innerHTML =
+    '<span class="label">Zielbild 2028 · pro Jahr</span>' +
+    '<div class="kpis">' +
+      kpi('Deckungsbeitrag je hl', fmt(s.dbhl, 1) + ' €', s.dbhl - b.dbhl, ' €') +
+      kpi('Nettoerlös je hl', fmt(s.erl, 1) + ' €', s.erl - b.erl, ' €') +
+      kpi('Umsatz', fmt(s.revenue, 1) + ' Mio. €', s.revenue - b.revenue, ' Mio.') +
+      kpi('Absatz', fmt(s.vol * 1000, 0).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' Tsd. hl', (s.vol - b.vol) * 1000, ' Tsd.') +
+    '</div>' +
+    '<div class="res" style="background:' + resCol[0] + ';color:' + resCol[1] + '"><strong>' + resCol[2] + '</strong><br>Ergebniseffekt <span class="num">' + sgn(dDB, 1) + ' Mio. €</span> pro Jahr nach Programmkosten. Ergebnis ohne Sondereffekte rechnerisch <span class="num">' + fmt(result, 1) + ' Mio. €</span> (heute: ' + fmt(R0, 1) + ' Mio. €).</div>' +
+    '<div class="stack" style="gap:6px"><span class="label">Wirkung auf junge Erwachsene</span><div class="meter" aria-hidden="true"><i style="width:' + reach + '%"></i></div><span style="font-size:13px">Hebel: <strong>' + reachL + '</strong> – messbar erst mit Markentracking (Kategorie 4).</span></div>' +
+    '<div class="outlook"><span class="label">Ampel-Ausblick</span>' +
+      '<div><span>1 Gastronomie<small>Markt · Antwort: ' + GASTRO[sim.gastro].l + '</small></span>' + pill(st1) + '</div>' +
+      '<div><span>2 Handel &amp; Preis<small>Aktionsanteil ' + sim.promo + ' %, Erlös je hl ' + sgn(dErl, 1) + ' %</small></span>' + pill(s2) + '</div>' +
+      '<div><span>3 Konsumtrend<small>Markt · Antwort: Alkoholfrei ' + sim.af + ' %</small></span>' + pill(st3) + '</div>' +
+      '<div><span>4 Marke &amp; Kunden<small>Hebel ' + reachL + '</small></span>' + pill(st4) + '</div>' +
+      '<div><span>5 Umfeld · US-Zoll<small>' + fmt(s.usRev, 1) + ' Mio. € Umsatz in den USA</small></span>' + pill(s5) + '</div>' +
+      '<div><span>6 Organisation<small>Umsetzungsstand</small></span>' + pill(st6) + '</div>' +
+    '</div>' +
+    '<p style="margin:0;font-size:12px;color:#BDBDBD">Gastronomie und Konsumtrend zeigen den Markt – den ändern Stiegls Hebel nicht. Sie verändern Stiegls Antwort darauf und das Ergebnis.</p>';
+  $('mbar').innerHTML = '<span><span style="color:#BDBDBD">Ergebniseffekt</span><b class="num">' + sgn(dDB, 1) + ' Mio. €</b></span><span><span style="color:#BDBDBD">DB je hl</span><b class="num">' + fmt(s.dbhl, 1) + ' €</b></span><a href="#simOut" id="mbarLink">Details ↓</a>';
+  syncPresets();
+}
+$('mbar').addEventListener('click', function(e){ if (e.target.id === 'mbarLink') { e.preventDefault(); $('simOut').scrollIntoView({ behavior:'smooth' }); } });
+$('ctrls').addEventListener('input', function(e){
+  var r = e.target; if (!r.dataset || !r.dataset.k || r.type !== 'range') return;
+  sim[r.dataset.k] = Number(r.value);
+  var c = CTRLS.filter(function(x){ return x.k === r.dataset.k; })[0];
+  $('v-' + c.k).textContent = sim[c.k] + ' ' + c.unit;
+  renderOut();
+});
+$('ctrls').addEventListener('change', function(e){ if (e.target.type === 'range') { var k = e.target.dataset.k; renderCtrls(); renderOut(); var el = $('r-' + k); if (el) el.focus(); } });
+$('ctrls').addEventListener('click', function(e){
+  var b = e.target.closest('[data-v]'); if (!b) return;
+  sim[b.dataset.k] = Number(b.dataset.v); renderCtrls(); renderOut();
+});
+$('presets').addEventListener('click', function(e){
+  var b = e.target.closest('[data-p]'); if (!b) return;
+  var p = presets().filter(function(x){ return x[0] === b.dataset.p; })[0];
+  sim = Object.assign({}, p[2]); renderCtrls(); renderOut();
+});
+$('simReset').addEventListener('click', function(){ sim = base(); A = Object.assign({}, A0); renderCtrls(); renderAssump(); renderOut(); });
+
+var ASSUMP = [
+ ['up','Preisaufschlag Premium ggü. Standard', 0, 80, 5, '%'],
+ ['disc','Durchschnittlicher Aktionsrabatt', 10, 40, 1, '%'],
+ ['cv','Variable Kosten in % vom Standard-Nettoerlös', 50, 80, 1, '%'],
+ ['cprem','Mehrkosten Premium je hl', 0, 40, 1, '%'],
+ ['caf','Mehrkosten Alkoholfrei je hl (Entalkoholisierung)', 0, 40, 1, '%'],
+ ['incr','Zusätzlicher Absatz aus Alkoholfrei (statt Ersatz für Bier)', 0, 100, 5, '%'],
+ ['promoEl','Absatzverlust im Handel je 10 PP weniger Aktionen', 0, 6, 0.5, '%']
+];
+function renderAssump(){
+  var S = DATA.sim;
+  $('assumpBody').innerHTML =
+    '<ul>' +
+    '<li>Ausgangspunkt: Umsatz ' + fmt(S.umsatz, 1) + ' Mio. €, Absatz ' + fmt(S.absatz, 2) + ' Mio. hl, Exportanteil ' + S.export + ' %; im Inland ' + S.handel + ' % Handel und ' + S.gastro + ' % Gastronomie.</li>' +
+    '<li>Ergebnis heute ohne Sondereffekte: ' + fmt(S.ergebnis, 1) + ' Mio. €.</li>' +
+    '<li>Markt und Trinkverhalten bleiben wie heute. Premium ersetzt Standardbier, Alkoholfrei bringt teils zusätzlichen Absatz.</li>' +
+    '<li>Weniger Aktionen heben den Erlös je hl, kosten aber etwas Menge im Handel.</li>' +
+    '<li>Programmkosten pro Jahr: junge Erwachsene 0,5 bzw. 1,0 Mio. €; Partnerprogramm 0,4 Mio. €; mit neuer Logistik netto 0,1 Mio. €.</li>' +
+    '<li>Die Ausgangswerte lassen sich im Bearbeitungsmodus ändern.</li>' +
+    '</ul><div class="grid" style="margin-top:12px">' +
+    ASSUMP.map(function(a){
+      return '<div class="ctrl" style="background:var(--g1)"><label for="a-' + a[0] + '" style="font-size:14px">' + a[1] + '</label>' +
+        '<div class="num" style="font-weight:700" id="av-' + a[0] + '">' + String(A[a[0]]).replace('.', ',') + ' ' + a[5] + '</div>' +
+        '<input type="range" id="a-' + a[0] + '" data-a="' + a[0] + '" min="' + a[2] + '" max="' + a[3] + '" step="' + a[4] + '" value="' + A[a[0]] + '"></div>';
+    }).join('') + '</div>';
+}
+$('assumpBody').addEventListener('input', function(e){
+  var k = e.target.dataset && e.target.dataset.a; if (!k) return;
+  A[k] = Number(e.target.value);
+  var a = ASSUMP.filter(function(x){ return x[0] === k; })[0];
+  $('av-' + k).textContent = String(A[k]).replace('.', ',') + ' ' + a[5];
+  renderOut();
+});
+
+/* ---------------- RADAR ---------------- */
+var SIG_ST = ['beobachten','bewerten','übernommen'];
+function renderRadar(){
+  var box = $('radarBox');
+  Array.prototype.forEach.call(box.querySelectorAll('.sig'), function(n){ n.remove(); });
+  if (state.sig >= DATA.sigs.length) state.sig = 0;
+  DATA.sigs.forEach(function(s, i){
+    var b = document.createElement('button');
+    var x = s.x, y = s.y;
+    if (s.st === 'übernommen') { x = 50 + (s.x - 50) * 0.3; y = 50 + (s.y - 50) * 0.3; }
+    b.type = 'button'; b.className = 'sig' + (s.st === 'übernommen' ? ' in' : '');
+    b.style.left = x + '%'; b.style.top = y + '%';
+    b.setAttribute('aria-pressed', state.sig === i); b.setAttribute('aria-label', s.n + ' ' + s.t);
+    b.dataset.s = i; b.innerHTML = '<span>' + esc(s.n) + '</span>';
+    box.appendChild(b);
+  });
+  var s = DATA.sigs[state.sig];
+  var st = s.st === 'übernommen' ? '<span class="pill p-rot">im Cockpit</span>' : '<span class="pill p-neutral">' + esc(s.st) + '</span>';
+  $('sigDetail').innerHTML =
+    '<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap"><h3 style="font-size:22px"><span style="color:var(--red)">' + esc(s.n) + '</span>  ' + esc(s.t) + '</h3>' + st + '</div>' +
+    '<div style="background:var(--g1);border-radius:10px;padding:12px 14px;font-size:14px"><strong>Beobachtet: </strong>' + esc(s.obs) + '</div>' +
+    '<div style="font-size:14px;color:var(--g3)"><strong style="color:var(--black)">Hypothese: </strong>' + esc(s.hyp) + '</div>' +
+    '<div class="steps">' +
+      '<div class="step"><b>Beobachten</b>' + esc(s.beo) + '</div>' +
+      '<div class="step"><b>Auslöser</b>' + esc(s.aus) + '</div>' +
+      '<div class="step"><b>Handeln</b>' + esc(s.han) + '<div class="urg" style="margin-top:6px">Dringlichkeit: ' + esc(s.urg) + '</div></div>' +
+    '</div>' +
+    '<div class="now"><strong>Sofort: </strong>' + esc(s.now) + '</div>' +
+    '<div class="opts" role="group" aria-label="Signal wählen">' + DATA.sigs.map(function(x, i){ return '<button type="button" class="chip sm" data-s="' + i + '" aria-pressed="' + (state.sig === i) + '">' + esc(x.n) + ' ' + esc(x.short) + '</button>'; }).join('') + '</div>';
+}
+$('radar').addEventListener('click', function(e){
+  var b = e.target.closest('[data-s]'); if (!b) return;
+  state.sig = Number(b.dataset.s); renderRadar();
+});
+
+/* ---------------- EDITOR ---------------- */
+function getP(path){ return path.split('.').reduce(function(o, k){ return o == null ? o : o[k]; }, DATA); }
+function setP(path, v){
+  var ks = path.split('.'), last = ks.pop();
+  var o = ks.reduce(function(o, k){ return o[k]; }, DATA);
+  o[last] = v;
+}
+function fIn(path, label, opts){
+  opts = opts || {};
+  var v = getP(path), id = 'e-' + path.replace(/\./g, '-');
+  var cls = opts.wide ? ' wide' : '';
+  if (opts.sel) {
+    return '<label class="fld' + cls + '" for="' + id + '"><span>' + label + '</span><select id="' + id + '" data-p="' + path + '"' + (opts.int ? ' data-num="1"' : '') + (opts.status ? ' data-status="1" class="sel-' + esc(v) + '"' : '') + '>' +
+      opts.sel.map(function(o){ return '<option value="' + esc(o[0]) + '"' + (String(v) === String(o[0]) ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>';
+  }
+  if (opts.area) return '<label class="fld' + cls + '" for="' + id + '"><span>' + label + '</span><textarea id="' + id + '" data-p="' + path + '">' + esc(v) + '</textarea></label>';
+  return '<label class="fld' + cls + '" for="' + id + '"><span>' + label + '</span><input id="' + id + '" data-p="' + path + '"' + (opts.num ? ' type="number" step="any" inputmode="decimal" data-num="1"' : ' type="text"') + ' value="' + esc(v) + '"' + (opts.ph ? ' placeholder="' + esc(opts.ph) + '"' : '') + '></label>';
+}
+var STATUS_OPTS = [['rot','Rot'],['gelb','Gelb'],['gruen','Grün'],['offen','unbekannt']];
+function renderEditor(){
+  $('srcInfo').innerHTML = 'Aktuell angezeigt: <strong>' + (LOCAL ? 'lokale Änderungen in diesem Browser' : (SOURCE === 'daten.json' ? 'daten.json vom Server' : 'eingebaute Standarddaten')) + '</strong>.';
+  var h = '';
+  h += '<details class="card ed" open><summary><span>Allgemein und Finanzkennzahlen im Header</span></summary><div class="stack">' +
+    '<div class="fgrid">' + fIn('stand', 'Stand (z. B. November 2026)') + '</div>' +
+    DATA.fin.map(function(f, i){
+      return '<div class="subed">' + fIn('fin.' + i + '.l', 'Bezeichnung') + fIn('fin.' + i + '.v', 'Wert') + fIn('fin.' + i + '.n', 'Einordnung') +
+        fIn('fin.' + i + '.t', 'Farbe', { sel:[['gut','grün (gut)'],['mittel','gelb (mittel)'],['schlecht','rot (schlecht)']] }) + '</div>';
+    }).join('') + '</div></details>';
+  DATA.cats.forEach(function(c, ci){
+    h += '<details class="card ed"><summary><span>' + esc(c.nr) + ' ' + esc(c.name) + '</span><span id="eds-' + ci + '">' + pill(catStatus(c)) + '</span></summary><div class="stack">' +
+      '<div class="fgrid">' + fIn('cats.' + ci + '.key', 'Kennzahl auf der Kachel') + fIn('cats.' + ci + '.kl', 'Erläuterung zur Kennzahl') + fIn('cats.' + ci + '.owner', 'Zuständig') + '</div>' +
+      fIn('cats.' + ci + '.act', 'Bei Rot', { area:true }) +
+      '<span class="label">Subfaktoren – Status bestimmt die Ampel</span>' +
+      c.subs.map(function(r, ri){
+        var p = 'cats.' + ci + '.subs.' + ri;
+        return '<div class="subed"><strong class="wide" style="font-size:15px">' + esc(r.n) + '</strong>' +
+          fIn(p + '.v', 'Messwert', { ph:'leer = Daten fehlen' }) + fIn(p + '.s', 'Status', { sel:STATUS_OPTS, status:true }) +
+          fIn(p + '.m', 'Messung') + fIn(p + '.rh', 'Rhythmus') + fIn(p + '.th', 'Schwelle Grün / Gelb / Rot', { wide:true }) + '</div>';
+      }).join('') + '</div></details>';
+  });
+  h += '<details class="card ed"><summary><span>Radar schwacher Signale</span></summary><div class="stack">' +
+    DATA.sigs.map(function(s, i){
+      var p = 'sigs.' + i;
+      return '<div class="subed"><strong class="wide" style="font-size:15px">' + esc(s.n) + ' ' + esc(s.t) + '</strong>' +
+        fIn(p + '.st', 'Status', { sel:SIG_ST.map(function(x){ return [x, x]; }) }) + fIn(p + '.urg', 'Dringlichkeit', { sel:[['niedrig','niedrig'],['mittel','mittel'],['hoch','hoch']] }) +
+        fIn(p + '.obs', 'Beobachtet', { area:true, wide:true }) + fIn(p + '.now', 'Sofort', { area:true, wide:true }) + '</div>';
+    }).join('') + '</div></details>';
+  var FP = 'finanz';
+  h += '<details class="card ed"><summary><span>Finanzkennzahlen (Reiter)</span></summary><div class="stack">' +
+    '<div class="fgrid">' + fIn(FP + '.jahrA', 'Vorjahr') + fIn(FP + '.jahrB', 'Aktuelles Jahr') +
+      fIn(FP + '.emq', 'URG Eigenmittelquote (%)', { num:true }) + fIn(FP + '.sdt', 'URG fiktive Schuldentilgungsdauer (Jahre)', { num:true }) +
+      fIn(FP + '.zA', 'Altman Z′ Vorjahr', { num:true }) + fIn(FP + '.zB', 'Altman Z′ aktuell', { num:true }) + '</div>' +
+    '<span class="label">Rating-Raster – Stufe 1 (AAA) bis 6 (D)</span>' +
+    DATA.finanz.ratings.map(function(r, i){
+      var p = FP + '.ratings.' + i, st = [1,2,3,4,5,6].map(function(k){ return [k, String(k)]; });
+      return '<div class="subed"><strong class="wide" style="font-size:15px">' + esc(r.n) + '</strong>' +
+        fIn(p + '.a', 'Wert Vorjahr') + fIn(p + '.sa', 'Stufe Vorjahr', { sel:st, int:true }) + fIn(p + '.b', 'Wert aktuell') + fIn(p + '.sb', 'Stufe aktuell', { sel:st, int:true }) + '</div>';
+    }).join('') +
+    '<span class="label">Jahresergebnis (Mio. €)</span><div class="fgrid">' +
+    DATA.finanz.results.map(function(r, i){ return fIn(FP + '.results.' + i + '.y', 'Jahr') + fIn(FP + '.results.' + i + '.v', 'Ergebnis', { num:true }); }).join('') + '</div>' +
+    fIn(FP + '.resultNote', 'Hinweis unter dem Diagramm', { area:true }) +
+    '<span class="label">Hinter den Zahlen</span>' +
+    DATA.finanz.specials.map(function(s, i){
+      var p = FP + '.specials.' + i;
+      return '<div class="subed">' + fIn(p + '.v', 'Wert') + fIn(p + '.tone', 'Farbe', { sel:[['gut','grün'],['mittel','gelb'],['schlecht','rot']] }) + fIn(p + '.t', 'Text', { wide:true }) + '</div>';
+    }).join('') + '</div></details>';
+  h += '<details class="card ed"><summary><span>Ausgangswerte des Simulators</span></summary><div class="stack">' +
+    '<p style="margin:0;font-size:14px;color:var(--g3)">Werte von heute. Sobald Stiegl-Daten vorliegen, hier eintragen – der Simulator rechnet dann damit.</p>' +
+    '<div class="fgrid">' +
+      fIn('sim.umsatz', 'Umsatz (Mio. €)', { num:true }) + fIn('sim.absatz', 'Absatz (Mio. hl)', { num:true }) + fIn('sim.ergebnis', 'Ergebnis ohne Sondereffekte (Mio. €)', { num:true }) +
+      fIn('sim.export', 'Exportanteil (%)', { num:true }) + fIn('sim.handel', 'Inland über Handel (%)', { num:true }) + fIn('sim.gastro', 'Inland über Gastronomie (%)', { num:true }) +
+      fIn('sim.prem', 'Premium-Anteil heute (%)', { num:true }) + fIn('sim.af', 'Alkoholfrei-Anteil heute (%)', { num:true }) +
+      fIn('sim.promo', 'Aktionsanteil im Handel heute (%)', { num:true }) + fIn('sim.usa', 'USA-Anteil am Export (%)', { num:true }) +
+    '</div></div></details>';
+  $('edBody').innerHTML = h;
+}
+var edTimer = null;
+function onEdit(e){
+  var el = e.target, p = el.dataset && el.dataset.p; if (!p) return;
+  var v = el.value;
+  if (el.dataset.num) { v = Number(String(v).replace(',', '.')); if (!isFinite(v) || el.value === '') return; }
+  setP(p, v);
+  if (el.dataset.status) {
+    el.className = 'sel-' + v;
+    var ci = Number(p.split('.')[1]); var badge = $('eds-' + ci); if (badge) badge.innerHTML = pill(catStatus(DATA.cats[ci]));
+  }
+  if (p.indexOf('sim.') === 0) sim = base();
+  clearTimeout(edTimer);
+  edTimer = setTimeout(function(){ save(); renderViews(); }, 150);
+}
+$('edBody').addEventListener('input', onEdit);
+$('edBody').addEventListener('change', onEdit);
+
+function download(name, text, type){
+  var blob = new Blob([text], { type:type });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+$('exJson').addEventListener('click', function(){
+  download('daten.json', JSON.stringify(DATA, null, 2), 'application/json');
+  toast('daten.json gespeichert – jetzt neben der index.html hochladen.');
+});
+var CSV_HEAD = ['ID','Kategorie','Subfaktor','Messwert','Status','Messung','Rhythmus','Schwelle'];
+function csvCell(v){ v = String(v == null ? '' : v); return /[;"\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+$('exCsv').addEventListener('click', function(){
+  var rows = [CSV_HEAD.join(';')];
+  DATA.cats.forEach(function(c, ci){ c.subs.forEach(function(r, ri){
+    rows.push([(ci + 1) + '.' + (ri + 1), c.name, r.n, r.v, LBL[r.s], r.m, r.rh, r.th].map(csvCell).join(';'));
+  }); });
+  download('subfaktoren.csv', '﻿' + rows.join('\r\n'), 'text/csv;charset=utf-8');
+  toast('subfaktoren.csv gespeichert – in Excel bearbeiten und wieder importieren.');
+});
+function parseCSV(text){
+  text = text.replace(/^﻿/, '');
+  var sep = (text.split(/\r?\n/)[0].match(/;/g) || []).length >= (text.split(/\r?\n/)[0].match(/,/g) || []).length ? ';' : ',';
+  var rows = [], row = [], cell = '', q = false;
+  for (var i = 0; i < text.length; i++) {
+    var ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === sep) { row.push(cell); cell = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += ch;
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(function(r){ return r.some(function(c){ return c.trim() !== ''; }); });
+}
+function toStatus(v){
+  v = String(v || '').trim().toLowerCase();
+  if (v === 'rot' || v === 'r') return 'rot';
+  if (v === 'gelb' || v === 'y') return 'gelb';
+  if (v === 'grün' || v === 'gruen' || v === 'grun' || v === 'g') return 'gruen';
+  if (v === 'unbekannt' || v === 'offen' || v === '') return 'offen';
+  return null;
+}
+function importCSV(text){
+  var rows = parseCSV(text); if (!rows.length) throw new Error('Die CSV-Datei ist leer.');
+  var head = rows[0].map(function(h){ return h.trim().toLowerCase(); });
+  var ix = function(n){ return head.indexOf(n.toLowerCase()); };
+  if (ix('ID') < 0 || ix('Messwert') < 0 || ix('Status') < 0) throw new Error('Spalten „ID“, „Messwert“ und „Status“ fehlen – bitte die exportierte Vorlage verwenden.');
+  var n = 0, bad = [];
+  rows.slice(1).forEach(function(r){
+    var id = String(r[ix('ID')] || '').trim().replace(',', '.');
+    var m = id.match(/^(\d+)\.(\d+)$/); if (!m) { bad.push(id || '(leer)'); return; }
+    var c = DATA.cats[Number(m[1]) - 1], s = c && c.subs[Number(m[2]) - 1];
+    if (!s) { bad.push(id); return; }
+    var st = toStatus(r[ix('Status')]); if (st === null) { bad.push(id + ' (Status)'); return; }
+    s.v = String(r[ix('Messwert')] || '').trim(); s.s = st;
+    ['Messung','Rhythmus','Schwelle'].forEach(function(k, j){ var col = ix(k); if (col >= 0 && String(r[col] || '').trim()) s[['m','rh','th'][j]] = String(r[col]).trim(); });
+    n++;
+  });
+  return n + ' Subfaktoren übernommen' + (bad.length ? ', nicht erkannt: ' + bad.join(', ') : '') + '.';
+}
+$('imBtn').addEventListener('click', function(){ $('imFile').click(); });
+$('imFile').addEventListener('change', function(e){
+  var f = e.target.files && e.target.files[0]; if (!f) return;
+  var rd = new FileReader();
+  rd.onload = function(){
+    try {
+      var msg;
+      if (/\.csv$/i.test(f.name) || f.type.indexOf('csv') >= 0) { msg = importCSV(String(rd.result)); }
+      else {
+        var d = JSON.parse(String(rd.result));
+        if (!valid(d)) throw new Error('Die Datei hat nicht die erwartete Struktur (6 Kategorien mit Subfaktoren).');
+        DATA = normalize(d); msg = 'daten.json übernommen.';
+      }
+      sim = base(); save(); renderViews(); renderEditor(); toast(msg);
+    } catch (err) { toast('Import fehlgeschlagen: ' + err.message); }
+    e.target.value = '';
+  };
+  rd.readAsText(f, 'utf-8');
+});
+function dropLocal(){
+  if (!confirm('Lokale Änderungen in diesem Browser verwerfen und den veröffentlichten Stand laden?')) return;
+  lsSet(null); LOCAL = false; DATA = clone(PUBLISHED); sim = base();
+  $('banner').hidden = true; renderViews(); if (state.tab === 'edit') renderEditor();
+  toast('Veröffentlichter Stand geladen.');
+}
+$('edReset').addEventListener('click', dropLocal);
+
+/* ---------------- INIT ---------------- */
+function num(v){ v = Number(v); return isFinite(v) ? v : 0; }
+function renderFinanz(){
+  var F = DATA.finanz, SC = { 1:'#1E6B3F', 2:'#1E6B3F', 3:'#F2B700', 4:'#F2B700', 5:'#E3001B', 6:'#E3001B' };
+  $('thA').textContent = F.jahrA; $('thB').textContent = F.jahrB;
+  $('ratings').innerHTML = F.ratings.map(function(r){
+    var cells = [1,2,3,4,5,6].map(function(k){
+      var fill = k === num(r.sb), ring = k === num(r.sa);
+      return '<span class="cell" style="' + (fill ? 'background:' + SC[k] + ';color:' + (k === 3 || k === 4 ? '#141414' : '#fff') + ';' : '') + (ring ? 'box-shadow:inset 0 0 0 2.5px #141414' : '') + '">' + k + '</span>';
+    }).join('');
+    return '<tr><td><strong>' + esc(r.n) + '</strong><br><small>' + esc(r.f) + '</small></td><td class="num" data-l="' + esc(F.jahrA) + '">' + esc(r.a) + '</td><td class="num" data-l="' + esc(F.jahrB) + '" style="font-weight:700">' + esc(r.b) + '</td><td><span class="cells">' + cells + '</span></td></tr>';
+  }).join('');
+  $('ratNote').textContent = 'Gefüllt = ' + F.jahrB + ', Rahmen = ' + F.jahrA + '. Debt Coverage als Näherung.';
+  var TC = { gut:'#9FD3B4', mittel:'#F2B700', schlecht:'#FF8A95' };
+  $('specials').innerHTML = F.specials.map(function(s){ return '<div><b class="num" style="color:' + (TC[s.tone] || '#fff') + '">' + esc(s.v) + '</b><span>' + esc(s.t) + '</span></div>'; }).join('');
+  var emq = num(F.emq), sdt = num(F.sdt);
+  $('urgE').textContent = fmt(emq, 1) + ' % · Grenze 8 %';
+  $('urgS').textContent = '≈ ' + fmt(sdt, 1) + ' J. · Grenze 15 J.';
+  var reorg = emq < 8 && sdt > 15;
+  $('urgR').textContent = reorg ? 'Reorganisationsbedarf wird vermutet' : 'Kein vermuteter Reorganisationsbedarf';
+  $('urgR').style.color = reorg ? 'var(--red-d)' : 'var(--green)';
+  var mx = Math.max.apply(null, F.results.map(function(r){ return Math.abs(num(r.v)); }).concat([0.1]));
+  var last = F.results.length - 1;
+  $('bars').innerHTML = F.results.map(function(r, i){
+    var v = num(r.v);
+    return '<div><i class="' + (v > 0 ? 'pos' : '') + '" style="height:' + Math.max(2, Math.round(Math.abs(v) / mx * 120)) + 'px;' + (i === last && v <= 0 ? 'background:var(--red)' : '') + '"></i><strong class="num">' + fmt(v, 1) + '</strong><span style="color:var(--g3);font-size:13px">' + esc(r.y) + '</span></div>';
+  }).join('');
+  $('barNote').textContent = F.resultNote || '';
+  function pos(z){ return Math.max(0, Math.min(100, num(z) / 3.5 * 100)); }
+  $('zmark').innerHTML = '<div style="left:' + pos(F.zA) + '%;transform:translateX(-100%);align-items:flex-end;color:var(--g3)"><span></span><b class="num" style="font-weight:400;padding-right:4px">' + esc(F.jahrA) + ': ' + fmt(num(F.zA), 2) + '</b></div>' +
+    '<div style="left:' + pos(F.zB) + '%;font-weight:700"><span style="width:3px;height:26px"></span><b class="num">' + esc(F.jahrB) + ': ' + fmt(num(F.zB), 2) + '</b></div>';
+}
+function renderViews(){ renderHeader(); renderCockpit(); renderCtrls(); renderAssump(); renderOut(); renderRadar(); renderFinanz(); }
+var h0 = (location.hash || '').replace('#', '');
+if (h0 === 'bearbeiten') { state.edit = true; state.tab = 'edit'; }
+else if (['cockpit','sim','radar','finanz'].indexOf(h0) >= 0) state.tab = h0;
+$('banner').hidden = !LOCAL;
+renderTabs(); renderViews(); if (state.tab === 'edit') renderEditor();
+
+// daten.json vom Server laden (falls vorhanden). Lokale Änderungen haben Vorrang.
+if (window.fetch && location.protocol !== 'file:') {
+  fetch('daten.json', { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if (!d || !valid(d)) return;
+    PUBLISHED = normalize(d); SOURCE = 'daten.json';
+    if (!LOCAL) { DATA = clone(PUBLISHED); sim = base(); renderViews(); }
+    if (state.tab === 'edit') renderEditor();
+  }).catch(function(){});
+}
+window.__COCKPIT_DEFAULT = DEFAULT;
+})();
+</script>
+</body>
+</html>

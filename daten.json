@@ -1,0 +1,508 @@
+{
+  "version": 1,
+  "stand": "Oktober 2026",
+  "fin": [
+    {
+      "l": "Eigenkapitalquote 2025",
+      "v": "56,8 %",
+      "n": "Rating AAA",
+      "t": "gut"
+    },
+    {
+      "l": "ROI 2025, bereinigt",
+      "v": "−3,5 %",
+      "n": "Stufe 6 von 6",
+      "t": "schlecht"
+    },
+    {
+      "l": "Altman Z′ 2025",
+      "v": "1,69",
+      "n": "Grauzone",
+      "t": "mittel"
+    }
+  ],
+  "cats": [
+    {
+      "nr": "1",
+      "name": "Gastronomie",
+      "q": "Hält der Gastronomie-Kanal?",
+      "key": "−4 %",
+      "kl": "Fassbier-Absatz Österreich 2025",
+      "lead": "1–2 Jahre",
+      "owner": "Vertrieb Gastronomie",
+      "chain": [
+        "Weniger Fassbier und weniger aktive Gastro-Kunden",
+        "Fixkosten in Logistik und Vertrieb bleiben",
+        "Ergebnis sinkt in 1–2 Jahren"
+      ],
+      "act": "Vertrieb Gastronomie prüft Abgänge je Region sofort; Geschäftsführung entscheidet im nächsten Jour fixe über das Partnerprogramm.",
+      "subs": [
+        {
+          "n": "Fassbier-Absatz (Markt)",
+          "v": "−4 % ggü. Vorjahr (2025)",
+          "m": "Branchenstatistik",
+          "rh": "monatlich",
+          "th": "≥ VJ / bis −3 % / < −3 %",
+          "s": "rot"
+        },
+        {
+          "n": "Aktive Gastro-Kunden",
+          "v": "",
+          "m": "CRM",
+          "rh": "monatlich",
+          "th": "≥ VJ / bis −3 % / < −5 %",
+          "s": "offen"
+        },
+        {
+          "n": "Hektoliter je Gastro-Kunde",
+          "v": "",
+          "m": "ERP",
+          "rh": "monatlich",
+          "th": "≥ VJ / bis −3 % / < −3 %",
+          "s": "offen"
+        },
+        {
+          "n": "Insolvenzen Gastronomie und Beherbergung",
+          "v": "807 (2025, −1 %)",
+          "m": "Insolvenzstatistik",
+          "rh": "quartalsweise",
+          "th": "sinkend / ± 5 % / steigend",
+          "s": "gelb"
+        },
+        {
+          "n": "Zahlungsdauer Gastro-Kunden",
+          "v": "",
+          "m": "Debitorenbuchhaltung",
+          "rh": "monatlich",
+          "th": "≤ 30 / 30–45 / > 45 Tage",
+          "s": "offen"
+        }
+      ]
+    },
+    {
+      "nr": "2",
+      "name": "Handel & Preis",
+      "q": "Behält Stiegl Preismacht im Handel?",
+      "key": "≈ 70 %",
+      "kl": "Bier im Handel in Aktion verkauft (2024)",
+      "lead": "≈ 1 Jahr",
+      "owner": "Key Account Management",
+      "chain": [
+        "Mehr Absatz über Aktionen",
+        "Nettoerlös je Hektoliter sinkt",
+        "Marge sinkt bei gleicher Menge"
+      ],
+      "act": "Key Account deckelt das Aktionsbudget zur nächsten Verhandlung; Geschäftsführung entscheidet über Konditionen je Partner.",
+      "subs": [
+        {
+          "n": "Aktionsanteil Bier im Handel",
+          "v": "≈ 70 %, steigend",
+          "m": "Handelspanel",
+          "rh": "monatlich",
+          "th": "< 40 % / 40–50 % / > 50 %",
+          "s": "rot"
+        },
+        {
+          "n": "Nettoerlös je Hektoliter",
+          "v": "",
+          "m": "Fakturierung",
+          "rh": "monatlich",
+          "th": "≥ VJ / bis −2 % / < −2 %",
+          "s": "offen"
+        },
+        {
+          "n": "Eigenmarken im Premium-Segment",
+          "v": "",
+          "m": "Regal-Tracking",
+          "rh": "quartalsweise",
+          "th": "stabil / + 1 PP / > + 2 PP",
+          "s": "offen"
+        },
+        {
+          "n": "Umsatzanteil Top-2-Handelspartner",
+          "v": "",
+          "m": "Kundenstatistik",
+          "rh": "quartalsweise",
+          "th": "< 40 % / 40–50 % / > 50 %",
+          "s": "offen"
+        }
+      ]
+    },
+    {
+      "nr": "3",
+      "name": "Konsumtrend",
+      "q": "Wie viel und was trinkt Österreich?",
+      "key": "97,6 l",
+      "kl": "Bier pro Kopf 2024/25, −5 %",
+      "lead": "2–5 Jahre",
+      "owner": "Produktmanagement, Geschäftsführung",
+      "chain": [
+        "Weniger Bier pro Kopf",
+        "Kernmarkt schrumpft",
+        "Auslastung sinkt über Jahre"
+      ],
+      "act": "Produktmanagement legt im nächsten Quartalsgespräch einen Alkoholfrei-Plan vor; Geschäftsführung entscheidet über Kapazität.",
+      "subs": [
+        {
+          "n": "Pro-Kopf-Verbrauch Bier",
+          "v": "97,6 l (−5 %)",
+          "m": "Versorgungsbilanz",
+          "rh": "jährlich",
+          "th": "> −1 % / −1 bis −3 % / < −3 %",
+          "s": "rot"
+        },
+        {
+          "n": "Anteil Alkoholfrei am Markt",
+          "v": "≈ 4 %; DE/CZ ≈ 10 %",
+          "m": "Branchenstatistik",
+          "rh": "quartalsweise",
+          "th": "Abstand zu DE/CZ sinkt / stabil / wächst",
+          "s": "gelb"
+        },
+        {
+          "n": "Stiegl im Alkoholfrei-Segment",
+          "v": "stärkstes Wachstum 2025",
+          "m": "Marktdaten",
+          "rh": "quartalsweise",
+          "th": "≥ Markt / bis −1 PP / < −1 PP",
+          "s": "gruen"
+        },
+        {
+          "n": "Lebenszeitabstinenz Jugendlicher",
+          "v": "18 %, seit 2007 vervierfacht",
+          "m": "Jugendstudie",
+          "rh": "alle 4–5 Jahre",
+          "th": "sinkend / stabil / steigend",
+          "s": "rot"
+        }
+      ]
+    },
+    {
+      "nr": "4",
+      "name": "Marke & Kunden",
+      "q": "Erreicht Stiegl die nächste Generation?",
+      "key": "?",
+      "kl": "Benötigt: Markentracking",
+      "lead": "1–3 Jahre",
+      "owner": "Marketing",
+      "chain": [
+        "Junge wählen seltener Stiegl",
+        "Wiederkauf sinkt",
+        "Absatz von morgen fehlt"
+      ],
+      "act": "Marketing startet innerhalb eines Quartals Zielgruppentests mit 18- bis 29-Jährigen; Ergebnis und Maßnahmen ins nächste Quartalsgespräch.",
+      "subs": [
+        {
+          "n": "Markenpräferenz 18–29 J. vs. 50+",
+          "v": "",
+          "m": "Brand-Health-Tracking",
+          "rh": "halbjährlich",
+          "th": "steigend / stabil / − 5 Punkte",
+          "s": "offen"
+        },
+        {
+          "n": "Kaufabsicht und Wiederkaufrate",
+          "v": "",
+          "m": "Marktforschung",
+          "rh": "quartalsweise",
+          "th": "≥ VJ / bis −2 PP / < −2 PP",
+          "s": "offen"
+        },
+        {
+          "n": "Social-Media-Reichweite bei Jungen",
+          "v": "",
+          "m": "Social Listening",
+          "rh": "monatlich",
+          "th": "≥ VJ / stabil / sinkend",
+          "s": "offen"
+        },
+        {
+          "n": "Präsenz bei Events und Anlässen",
+          "v": "",
+          "m": "Sponsoring-Controlling",
+          "rh": "quartalsweise",
+          "th": "≥ VJ / bis −10 % / < −10 %",
+          "s": "offen"
+        }
+      ]
+    },
+    {
+      "nr": "5",
+      "name": "Umfeld",
+      "q": "Was ändert sich von außen?",
+      "key": "−23 %",
+      "kl": "Dosenbier 2025 nach Einwegpfand",
+      "lead": "1–3 Jahre",
+      "owner": "Geschäftsführung, Einkauf, Export",
+      "chain": [
+        "Pfand, Zoll, Klima, Energie",
+        "Kosten steigen",
+        "Schocks in 1–3 Jahren"
+      ],
+      "act": "Einkauf sichert Gerste und Energie ab, Export prüft Ausweichmärkte; die Geschäftsführung entscheidet im Quartalsgespräch über die Gebinde.",
+      "subs": [
+        {
+          "n": "Regulierung: Einwegpfand",
+          "v": "Dosenbier −23 % (2025)",
+          "m": "Branchenstatistik",
+          "rh": "quartalsweise",
+          "th": "> −5 % / −5 bis −15 % / < −15 %",
+          "s": "rot"
+        },
+        {
+          "n": "Handelspolitik: US-Zoll",
+          "v": "10 % Zoll · USA = 40 % des Exports",
+          "m": "Export",
+          "rh": "quartalsweise",
+          "th": "kein Zoll / ≤ 10 % / > 10 %",
+          "s": "gelb"
+        },
+        {
+          "n": "Klima: Braugerste und Hitzetage",
+          "v": "",
+          "m": "Ernteprognosen, Wetterdienst",
+          "rh": "saisonal",
+          "th": "Preis < +5 % / +5–15 % / > +15 %",
+          "s": "offen"
+        },
+        {
+          "n": "Energie- und Glaspreise ggü. Plan",
+          "v": "",
+          "m": "Einkauf",
+          "rh": "monatlich",
+          "th": "< +5 % / +5–15 % / > +15 %",
+          "s": "offen"
+        }
+      ]
+    },
+    {
+      "nr": "6",
+      "name": "Organisation",
+      "q": "Gelingt die Neuausrichtung?",
+      "key": "?",
+      "kl": "Benötigt: Umsetzungsstand",
+      "lead": "1–3 Jahre",
+      "owner": "Geschäftsführung, Eigentümer",
+      "chain": [
+        "Umsetzung verzögert",
+        "Maßnahmen greifen spät",
+        "Eigentümer müssen nachschießen"
+      ],
+      "act": "Die Geschäftsführung schärft die Meilensteine sofort nach; bei anhaltendem Verzug Strategieklausur mit den Eigentümern.",
+      "subs": [
+        {
+          "n": "Umsetzung Neuausrichtung",
+          "v": "Ziel 2026: Verlust halbieren",
+          "m": "Projektcontrolling",
+          "rh": "quartalsweise",
+          "th": "im Plan / < 1 Quartal Verzug / > 1 Quartal",
+          "s": "offen"
+        },
+        {
+          "n": "Fluktuation Schlüsselfunktionen",
+          "v": "",
+          "m": "HR",
+          "rh": "quartalsweise",
+          "th": "< 5 % / 5–10 % / > 10 %",
+          "s": "offen"
+        },
+        {
+          "n": "Umsatzanteil neuer Produkte",
+          "v": "",
+          "m": "Controlling",
+          "rh": "jährlich",
+          "th": "> 10 % / 5–10 % / < 5 %",
+          "s": "offen"
+        },
+        {
+          "n": "Nachfolge und Governance",
+          "v": "",
+          "m": "Eigentümer",
+          "rh": "jährlich",
+          "th": "geregelt / in Arbeit / offen",
+          "s": "offen"
+        }
+      ]
+    }
+  ],
+  "sigs": [
+    {
+      "n": "1",
+      "t": "GLP-1-Abnehmspritzen",
+      "short": "GLP-1",
+      "st": "bewerten",
+      "x": 70,
+      "y": 30,
+      "obs": "Studie: Tage mit starkem Konsum sinken von 17 auf 5 pro Monat (Placebo 9). Die Wirkung auf den Biermarkt ist offen.",
+      "hyp": "Breite Nutzung senkt den Bierkonsum in Kernzielgruppen.",
+      "beo": "Strategie & Controlling, halbjährlich: Verbreitung der Präparate in Österreich, neue Studien, Absatz je Region.",
+      "aus": "Befragung zeigt weniger Konsum bei Nutzern → Subfaktor in Kategorie 3 mit Ampel. Uneindeutig → Marktforschung.",
+      "han": "Produktmanagement prüft kalorienarme und alkoholfreie Varianten; Geschäftsführung entscheidet über Budget.",
+      "urg": "mittel",
+      "now": "Nächste Konsumentenbefragung um Fragen zu GLP-1 ergänzen – geringe Kosten, klare Datenbasis."
+    },
+    {
+      "n": "2",
+      "t": "Gen Alpha wird 16",
+      "short": "Gen Alpha",
+      "st": "beobachten",
+      "x": 18,
+      "y": 36,
+      "obs": "Die ersten Jahrgänge der Generation Alpha erreichen das Mindestalter für Bier; Konsumdaten fehlen. Abstinenz Jugendlicher 18 %, seit 2007 vervierfacht.",
+      "hyp": "Der Abstinenztrend der Gen Z setzt sich fort – Stiegl verliert Kundschaft, bevor sie entsteht.",
+      "beo": "Marketing, jährlich: Markenpräferenz 18–29 aus dem Brand-Health-Tracking; neue Jugendstudien bei Erscheinen.",
+      "aus": "Präferenz der 18- bis 29-Jährigen unter dem Gesamtwert oder zweimal in Folge fallend → Kategorie 4 auf Gelb.",
+      "han": "Marketing baut Alkoholfrei und Erlebnis (Brauwelt, Events) für junge Erwachsene aus; Junior Board testet Ideen.",
+      "urg": "hoch",
+      "now": "Jugendschutz zuerst: Alkoholisches nur an Erwachsene bewerben, Markenbindung über Alkoholfrei und Erlebnis."
+    },
+    {
+      "n": "3",
+      "t": "Alkoholverbote bei Hitze",
+      "short": "Hitzeverbote",
+      "st": "beobachten",
+      "x": 84,
+      "y": 62,
+      "obs": "Paris, Juni 2026: Verkauf zum Mitnehmen und Konsum im öffentlichen Raum während der Hitzewarnung untersagt.",
+      "hyp": "Ähnliche Regeln in österreichischen Städten oder bei Großveranstaltungen träfen Feste, Open Air und den Sommerabsatz.",
+      "beo": "Geschäftsführung mit dem Brauereiverband, quartalsweise: Beschlüsse von Städten und Veranstaltern; Hitzetage.",
+      "aus": "Erste Stadt oder Großveranstaltung in Österreich beschließt ein Verbot → Subfaktor in Kategorie 5, Szenario fürs Festgeschäft.",
+      "han": "Vertrieb Events verankert Alkoholfrei in Festverträgen; Geschäftsführung bringt ihre Position über den Verband ein.",
+      "urg": "niedrig",
+      "now": "Anteil von Sommer- und Festgeschäft am Absatz beziffern – zeigt, wie groß das Risiko wirklich ist."
+    },
+    {
+      "n": "4",
+      "t": "Gerste in Extremjahren",
+      "short": "Gerste",
+      "st": "bewerten",
+      "x": 33,
+      "y": 76,
+      "obs": "Modellrechnung: In Jahren mit extremer Hitze und Dürre sinkt der Gerstenertrag weltweit um 3 bis 17 %.",
+      "hyp": "Extremjahre verknappen und verteuern Braugerste; Kosten und Qualität schwanken stärker.",
+      "beo": "Einkauf, vor jeder Ernte (Juni/Juli): Ernteprognosen, Braugerstenpreis, Hitzetage.",
+      "aus": "Prognose deutlich unter Vorjahr oder Preis über Plan → Einkauf sichert Mengen, Controlling rechnet das Kostenszenario.",
+      "han": "Einkauf streut Lieferanten und Herkunftsregionen und prüft mehrjährige Verträge; Produktion prüft Rezeptur-Spielräume.",
+      "urg": "mittel",
+      "now": "Ein Dürrejahr als Mengen- und Preisszenario in die Planung 2027 aufnehmen."
+    },
+    {
+      "n": "5",
+      "t": "US-Zoll",
+      "short": "US-Zoll",
+      "st": "übernommen",
+      "x": 57,
+      "y": 57,
+      "obs": "10 % Zusatzzoll auf EU-Waren; die USA nehmen rund 40 % des Stiegl-Exports ab.",
+      "hyp": "Höhere Zölle drücken Absatz oder Marge im wichtigsten Exportmarkt.",
+      "beo": "Bestätigt: steht als Subfaktor in Kategorie 5 und wird quartalsweise im Cockpit gemessen.",
+      "aus": "Zoll über 10 % → Kategorie 5 auf Rot.",
+      "han": "Export streut die Märkte und prüft Ausweichmärkte; Geschäftsführung entscheidet im Quartalsgespräch.",
+      "urg": "mittel",
+      "now": "Im Simulator zeigen, wie viel Umsatz am US-Markt hängt."
+    }
+  ],
+  "sim": {
+    "umsatz": 90.2,
+    "absatz": 1,
+    "ergebnis": -2.8,
+    "export": 12,
+    "handel": 70,
+    "gastro": 28,
+    "prem": 5,
+    "af": 4,
+    "promo": 70,
+    "usa": 40
+  },
+  "finanz": {
+    "jahrA": "2024",
+    "jahrB": "2025",
+    "ratings": [
+      {
+        "n": "Eigenkapitalquote",
+        "f": "Eigenkapital ÷ Gesamtkapital",
+        "a": "49,5 %",
+        "b": "56,8 %",
+        "sa": 1,
+        "sb": 1
+      },
+      {
+        "n": "ROI",
+        "f": "bereinigtes EBIT ÷ Gesamtkapital",
+        "a": "−1,0 %",
+        "b": "−3,5 %",
+        "sa": 6,
+        "sb": 6
+      },
+      {
+        "n": "Interest Cover",
+        "f": "bereinigtes EBITDA ÷ Zinsaufwand",
+        "a": "7,3",
+        "b": "9,0",
+        "sa": 4,
+        "sb": 4
+      },
+      {
+        "n": "Working-Capital-Ratio",
+        "f": "Umlaufvermögen ÷ kurzfristige Verbindlichkeiten",
+        "a": "164 %",
+        "b": "204 %",
+        "sa": 3,
+        "sb": 1
+      },
+      {
+        "n": "Debt Coverage (Näherung)",
+        "f": "Nettoverschuldung ÷ bereinigtes EBITDA",
+        "a": "3,6 J.",
+        "b": "3,0 J.",
+        "sa": 2,
+        "sb": 1
+      }
+    ],
+    "specials": [
+      {
+        "v": "+10,0 Mio.",
+        "t": "Zuschuss der Eigentümer an die Vertriebstochter, Dezember 2025 – im Jahresabschluss abgeschrieben",
+        "tone": "schlecht"
+      },
+      {
+        "v": "−7,5 Mio.",
+        "t": "Jahresverlust der Vertriebstochter 2025 (2024: −4,5)",
+        "tone": "schlecht"
+      },
+      {
+        "v": "+3,6 Mio.",
+        "t": "einmalige Auflösung Fässerpfand im Betriebserfolg",
+        "tone": "mittel"
+      },
+      {
+        "v": "−5,5 %",
+        "t": "Umsatz 2025 ggü. 2024 (90,2 statt 95,4 Mio. €)",
+        "tone": "schlecht"
+      }
+    ],
+    "results": [
+      {
+        "y": "2022",
+        "v": -1.4
+      },
+      {
+        "y": "2023",
+        "v": -5
+      },
+      {
+        "y": "2024",
+        "v": -5.3
+      },
+      {
+        "y": "2025",
+        "v": -9.2
+      }
+    ],
+    "resultNote": "2025 inklusive −10,0 Mio. € Abschreibung auf den Zuschuss an die Vertriebstochter.",
+    "emq": 56.8,
+    "sdt": 4.9,
+    "zA": 1.49,
+    "zB": 1.69
+  }
+}
